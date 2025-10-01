@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16-alpine # استفاده از یک ایمیج سبک و به‌روز
+    image: postgres:16-alpine
     restart: always
     container_name: mehmandaar_db
     environment:
@@ -8,7 +8,7 @@ services:
       - POSTGRES_PASSWORD=mypassword
       - POSTGRES_DB=mydb
     ports:
-      - "5432:5432" # پورت داخلی کانتینر را به پورت سیستم میزبان متصل می‌کند
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -19,4 +19,4 @@ services:
 
 volumes:
   postgres_data:
-    driver: local # داده‌ها حتی با حذف کانتینر هم باقی می‌مانند
+    driver: local # persisting data
