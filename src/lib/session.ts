@@ -4,7 +4,7 @@ import {
   type SessionOptions,
 } from "iron-session";
 import { cookies } from "next/headers";
-import { env } from "@/env";
+import { env } from "~/env";
 
 export interface SessionData {
   userId?: number;
