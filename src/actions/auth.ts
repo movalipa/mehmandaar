@@ -28,7 +28,7 @@ export async function sendOTP(phone: string) {
     return { success: true }
   } catch (error) {
     console.error("Error sending OTP:", error)
-    return { success: false, error: "Failed to send OTP" }
+    return { success: false, error: "ارسال کد یک‌بارمصرف ناموفق بود" }
   }
 }
 
@@ -49,7 +49,10 @@ export async function verifyOTP(phone: string, code: string) {
       .limit(1)
 
     if (otpRecord.length === 0) {
-      return { success: false, error: "Invalid or expired OTP" }
+      return {
+        success: false,
+        error: "کد یک‌بارمصرف نامعتبر یا منقضی شده است",
+      }
     }
 
     // Mark OTP as verified
@@ -95,7 +98,7 @@ export async function verifyOTP(phone: string, code: string) {
     return { success: true, userId: user.id }
   } catch (error) {
     console.error("Error verifying OTP:", error)
-    return { success: false, error: "Failed to verify OTP" }
+    return { success: false, error: "تأیید کد یک‌بارمصرف ناموفق بود" }
   }
 }
 

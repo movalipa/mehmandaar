@@ -1,47 +1,93 @@
 "use client"
 
+import { REGEXP_ONLY_DIGITS } from "input-otp"
 import { Hotel } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import {
+  createContext,
+  type FormEvent,
+  type ReactNode,
+  useContext,
+  useState,
+} from "react"
 import { sendOTP, verifyOTP } from "@/actions/auth"
+import ThemeButton from "@/components/shared/theme-button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
+import { Spinner } from "@/components/ui/spinner"
 
-export default function LoginPage() {
+// Types
+type Step = "phone" | "code"
+
+interface AuthContextValue {
+  step: Step
+  phone: string
+  code: string
+  loading: boolean
+  error: string
+  setPhone: (phone: string) => void
+  setCode: (code: string) => void
+  handlePhoneSubmit: (e: FormEvent) => Promise<void>
+  handleCodeSubmit: (e: FormEvent) => Promise<void>
+  handleBack: () => void
+}
+
+// Context
+const AuthContext = createContext<AuthContextValue | null>(null)
+
+const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (!context) throw new Error("Auth components must be used within Root")
+  return context
+}
+
+// Root
+function Root({ children }: { children: ReactNode }) {
   const router = useRouter()
-  const [step, setStep] = useState<"phone" | "code">("phone")
+  const [step, setStep] = useState<Step>("phone")
   const [phone, setPhone] = useState("")
   const [code, setCode] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const handlePhoneSubmit = async (e: React.FormEvent) => {
+  const handlePhoneSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
-    // Basic phone validation
     if (phone.length < 10) {
-      setError("Please enter a valid phone number")
+      setError("لطفا شماره تلفن معتبر وارد کنید")
       setLoading(false)
       return
     }
 
     const result = await sendOTP(phone)
     setLoading(false)
-
-    if (result.success) {
-      setStep("code")
-    } else {
-      setError(result.error || "Failed to send OTP")
-    }
+    result.success
+      ? setStep("code")
+      : setError(result.error || "ارسال کد با خطا مواجه شد")
   }
 
-  const handleCodeSubmit = async (e: React.FormEvent) => {
+  const handleCodeSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
     if (code.length !== 6) {
-      setError("Please enter a valid 6-digit code")
+      setError("لطفا کد ۶ رقمی معتبر وارد کنید")
       setLoading(false)
       return
     }
@@ -50,11 +96,10 @@ export default function LoginPage() {
     setLoading(false)
 
     if (result.success) {
-      // Redirect will happen automatically via middleware
       router.push("/dashboard")
       router.refresh()
     } else {
-      setError(result.error || "Invalid OTP code")
+      setError(result.error || "کد تایید نامعتبر است")
     }
   }
 
@@ -65,168 +110,171 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Hotel size={32} />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">مهماندار</h1>
-          <p className="text-gray-600">
-            {step === "phone"
-              ? "Enter your phone number to continue"
-              : "Enter the verification code"}
-          </p>
-        </div>
+    <AuthContext.Provider
+      value={{
+        step,
+        phone,
+        code,
+        loading,
+        error,
+        setPhone,
+        setCode,
+        handlePhoneSubmit,
+        handleCodeSubmit,
+        handleBack,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
+}
 
-        {/* Phone Number Step */}
-        {step === "phone" && (
-          <form onSubmit={handlePhoneSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Phone Number
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                placeholder="09123456789"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
-                disabled={loading}
-                required
-              />
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    role="img"
-                    aria-labelledby="loadingSpinnerTitle"
-                  >
-                    <title id="loadingSpinnerTitle">Loading</title>
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Sending...
-                </span>
-              ) : (
-                "Send Code"
-              )}
-            </button>
-          </form>
-        )}
-
-        {/* OTP Code Step */}
-        {step === "code" && (
-          <form onSubmit={handleCodeSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="code"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Verification Code
-              </label>
-              <input
-                id="code"
-                type="text"
-                value={code}
-                onChange={e => setCode(e.target.value.replace(/\D/g, ""))}
-                placeholder="123456"
-                maxLength={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-center text-2xl tracking-widest font-mono"
-                disabled={loading}
-                required
-              />
-              <p className="text-sm text-gray-500 mt-2 text-center">
-                Code sent to {phone}
-              </p>
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-3">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      role="img"
-                      aria-labelledby="verifyingSpinnerTitle"
-                    >
-                      <title id="verifyingSpinnerTitle">Verifying</title>
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Verifying...
-                  </span>
-                ) : (
-                  "Verify Code"
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={handleBack}
-                disabled={loading}
-                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Back
-              </button>
-            </div>
-          </form>
-        )}
+// Container
+function Container({ children }: { children: ReactNode }) {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="absolute top-4 left-4">
+        <ThemeButton />
       </div>
+      <Card className="w-full max-w-sm">{children}</Card>
     </div>
+  )
+}
+
+// Header
+function Header() {
+  const { step } = useAuth()
+
+  return (
+    <CardHeader className="text-center">
+      <div className="w-16 h-16 border-2 rounded-full flex items-center justify-center mx-auto mb-4">
+        <Hotel size={32} />
+      </div>
+      <CardTitle className="text-3xl">مهماندار</CardTitle>
+      <CardDescription>
+        {step === "phone"
+          ? "شماره تلفن خود را وارد کنید"
+          : "کد تایید ارسال شده را وارد کنید"}
+      </CardDescription>
+    </CardHeader>
+  )
+}
+
+// Error
+function ErrorMessage() {
+  const { error } = useAuth()
+  if (!error) return null
+
+  return (
+    <Alert variant="destructive">
+      <AlertDescription>{error}</AlertDescription>
+    </Alert>
+  )
+}
+
+// Phone Form
+function PhoneForm() {
+  const { step, phone, setPhone, loading, handlePhoneSubmit } = useAuth()
+
+  if (step !== "phone") return null
+
+  return (
+    <form onSubmit={handlePhoneSubmit} className="space-y-4" dir="rtl">
+      <Input
+        id="phone"
+        type="tel"
+        value={phone}
+        onChange={e => setPhone(e.target.value)}
+        placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+        disabled={loading}
+        required
+        dir="ltr"
+      />
+
+      <ErrorMessage />
+
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "در حال ارسال" : "ارسال کد"}
+        {loading && <Spinner />}
+      </Button>
+    </form>
+  )
+}
+
+// Code Form
+function CodeForm() {
+  const { step, phone, code, setCode, loading, handleCodeSubmit, handleBack } =
+    useAuth()
+
+  if (step !== "code") return null
+
+  return (
+    <form onSubmit={handleCodeSubmit} className="space-y-4" dir="rtl">
+      <div className="space-y-1">
+        <div className="flex justify-center" dir="ltr">
+          <InputOTP
+            maxLength={6}
+            value={code}
+            onChange={setCode}
+            disabled={loading}
+            inputMode="numeric"
+            pattern={REGEXP_ONLY_DIGITS}
+          >
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+        <p className="text-sm text-muted-foreground text-center">
+          کد به شماره {phone} ارسال شد
+        </p>
+      </div>
+
+      <ErrorMessage />
+
+      <div className="space-y-2">
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "در حال تایید" : "تایید کد"}
+          {loading && <Spinner />}
+        </Button>
+
+        <Button
+          type="button"
+          variant="secondary"
+          className="w-full"
+          onClick={handleBack}
+          disabled={loading}
+        >
+          بازگشت
+        </Button>
+      </div>
+    </form>
+  )
+}
+
+// Forms
+function Forms() {
+  return (
+    <CardContent>
+      <PhoneForm />
+      <CodeForm />
+    </CardContent>
+  )
+}
+
+// Page
+export default function LoginPage() {
+  return (
+    <Root>
+      <Container>
+        <Header />
+        <Forms />
+      </Container>
+    </Root>
   )
 }
