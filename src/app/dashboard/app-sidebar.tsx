@@ -11,7 +11,6 @@ import {
   Hotel,
   LogOut,
   MessageSquare,
-  Phone,
   Settings,
   UserIcon,
   Users,
@@ -19,7 +18,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { logout } from "@/actions/auth"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Sidebar,
   SidebarContent,
@@ -104,32 +102,15 @@ const settingsItems = [
 ]
 
 export function AppSidebar({ user }: { user: User }) {
-  const initials = user.name
-    .split(" ")
-    .map(n => n[0])
-    .join("")
-    .toUpperCase()
-
   return (
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <div className="flex items-center gap-3 px-2 py-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src="" />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold">{user.name}</span>
-                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Phone className="h-3 w-3" />
-                  {user.phone}
-                </span>
-              </div>
-            </div>
+            <SidebarMenuButton>
+              <UserIcon className="h-4 w-4" />
+              <span>{user.name}</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -196,7 +177,7 @@ export function AppSidebar({ user }: { user: User }) {
             <form action={logout}>
               <SidebarMenuButton
                 type="submit"
-                className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
+                className="text-destructive hover:text-destructive"
               >
                 <LogOut className="h-4 w-4" />
                 <span>خروج از حساب</span>
