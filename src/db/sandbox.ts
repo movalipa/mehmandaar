@@ -2,24 +2,24 @@
 // this file wont be included in production and it is meant for development only
 // run by `pnpm db:sandbox`
 
-import { db, usersTable } from "@/db";
+import { db, usersTable } from "@/db"
 
 async function main() {
-  console.warn("START");
+  console.warn("START")
 
-  console.time("a");
+  console.time("a")
 
   await db.insert(usersTable).values({
     name: "Aref",
     age: 12,
     email: crypto.randomUUID(),
-  });
-  console.log("New user created!");
+  })
+  console.log("New user created!")
 
-  const users = await db.select().from(usersTable);
-  console.log("Getting all users from the database: ", users);
+  const users = await db.select().from(usersTable)
+  console.log("Getting all users from the database: ", users)
 
-  console.timeEnd("a");
+  console.timeEnd("a")
   /*
   const users: {
     id: number;
@@ -40,7 +40,7 @@ async function main() {
   //   await db.delete(usersTable).where(eq(usersTable.email, user.email));
   //   console.log("User deleted!");
 
-  console.warn("END");
+  console.warn("END")
 }
 
-main();
+main()

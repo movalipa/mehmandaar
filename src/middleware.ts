@@ -1,44 +1,42 @@
-import { getIronSession } from "iron-session";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import { type SessionData, sessionOptions } from "@/lib/session";
+import { getIronSession } from "iron-session"
+import type { NextRequest } from "next/server"
+import { NextResponse } from "next/server"
+import { type SessionData, sessionOptions } from "@/lib/session"
 
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+  const response = NextResponse.next()
 
   const session = await getIronSession<SessionData>(
     request,
     response,
     sessionOptions
-  );
+  )
 
-  const { pathname } = request.nextUrl;
+  const { pathname } = request.nextUrl
 
   // Public routes that don't require authentication
-  const publicRoutes = ["/login"];
-  const isPublicRoute = publicRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
+  const publicRoutes = ["/login"]
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
 
   // Protected routes that require authentication
-  const protectedRoutes = ["/dashboard", "/profile"];
-  const isProtectedRoute = protectedRoutes.some((route) =>
+  const protectedRoutes = ["/dashboard", "/profile"]
+  const isProtectedRoute = protectedRoutes.some(route =>
     pathname.startsWith(route)
-  );
+  )
 
-  const isLoggedIn = session.isLoggedIn && session.userId;
+  const isLoggedIn = session.isLoggedIn && session.userId
 
   // Redirect logged-in users away from login page
   if (isLoggedIn && isPublicRoute) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   // Redirect non-logged-in users to login page
   if (!isLoggedIn && isProtectedRoute) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url))
   }
 
-  return response;
+  return response
 }
 
 export const config = {
@@ -52,4 +50,4 @@ export const config = {
      */
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
-};
+}
