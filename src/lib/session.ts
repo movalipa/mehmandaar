@@ -1,8 +1,4 @@
-import {
-  getIronSession,
-  type IronSession,
-  type SessionOptions,
-} from "iron-session"
+import { getIronSession, type SessionOptions } from "iron-session"
 import { cookies } from "next/headers"
 import { env } from "~/env"
 
@@ -18,12 +14,12 @@ export const sessionOptions: SessionOptions = {
   cookieOptions: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
     sameSite: "lax",
   },
+  ttl: 60 * 60 * 24 * 7, // // 7 days
 }
 
-export async function getSession(): Promise<IronSession<SessionData>> {
+export async function getSession() {
   const cookieStore = await cookies()
   return getIronSession<SessionData>(cookieStore, sessionOptions)
 }
