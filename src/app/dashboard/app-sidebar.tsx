@@ -1,6 +1,7 @@
 // components/app-sidebar.tsx
 "use client"
 
+import type { LucideIcon } from "lucide-react"
 import {
   BarChart3,
   BedDouble,
@@ -17,6 +18,7 @@ import {
   Utensils,
 } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { logout } from "@/actions/auth"
 import {
   Sidebar,
@@ -32,76 +34,94 @@ import {
 } from "@/components/ui/sidebar"
 import type { User } from "@/db"
 
-const menuItems = [
+interface MenuItem {
+  title: string
+  url: string
+  icon: LucideIcon
+}
+
+interface MenuSection {
+  label: string
+  items: MenuItem[]
+}
+
+const menuSections: MenuSection[] = [
   {
-    title: "داشبورد",
-    url: "/dashboard",
-    icon: Home,
+    label: "منوی اصلی",
+    items: [
+      { title: "داشبورد", url: "/dashboard", icon: Home },
+      { title: "رزرواسیون‌ها", url: "/dashboard/reservations", icon: Calendar },
+      { title: "اتاق‌ها", url: "/dashboard/rooms", icon: BedDouble },
+      { title: "مهمانان", url: "/dashboard/guests", icon: Users },
+      { title: "مالی", url: "/dashboard/finance", icon: DollarSign },
+      { title: "رستوران", url: "/dashboard/restaurant", icon: Utensils },
+    ],
   },
   {
-    title: "رزرواسیون‌ها",
-    url: "/dashboard/reservations",
-    icon: Calendar,
+    label: "مدیریت",
+    items: [
+      { title: "گزارشات", url: "/dashboard/reports", icon: BarChart3 },
+      { title: "پیام‌ها", url: "/dashboard/messages", icon: MessageSquare },
+      { title: "اسناد", url: "/dashboard/documents", icon: FileText },
+    ],
   },
   {
-    title: "اتاق‌ها",
-    url: "/dashboard/rooms",
-    icon: BedDouble,
-  },
-  {
-    title: "مهمانان",
-    url: "/dashboard/guests",
-    icon: Users,
-  },
-  {
-    title: "مالی",
-    url: "/dashboard/finance",
-    icon: DollarSign,
-  },
-  {
-    title: "رستوران",
-    url: "/dashboard/restaurant",
-    icon: Utensils,
+    label: "تنظیمات",
+    items: [
+      { title: "تنظیمات هتل", url: "/dashboard/hotel-settings", icon: Hotel },
+      { title: "پروفایل کاربری", url: "/dashboard/profile", icon: UserIcon },
+      { title: "تنظیمات سیستم", url: "/dashboard/settings", icon: Settings },
+    ],
   },
 ]
 
-const managementItems = [
-  {
-    title: "گزارشات",
-    url: "/dashboard/reports",
-    icon: BarChart3,
-  },
-  {
-    title: "پیام‌ها",
-    url: "/dashboard/messages",
-    icon: MessageSquare,
-  },
-  {
-    title: "اسناد",
-    url: "/dashboard/documents",
-    icon: FileText,
-  },
-]
+interface SidebarMenuItemLinkProps {
+  item: MenuItem
+  currentPath: string
+}
 
-const settingsItems = [
-  {
-    title: "تنظیمات هتل",
-    url: "/dashboard/hotel-settings",
-    icon: Hotel,
-  },
-  {
-    title: "پروفایل کاربری",
-    url: "/dashboard/profile",
-    icon: UserIcon,
-  },
-  {
-    title: "تنظیمات سیستم",
-    url: "/dashboard/settings",
-    icon: Settings,
-  },
-]
+function SidebarMenuItemLink({ item, currentPath }: SidebarMenuItemLinkProps) {
+  const isActive = currentPath === item.url
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild isActive={isActive}>
+        <Link href={item.url}>
+          <item.icon className="h-4 w-4" />
+          <span>{item.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
+interface SidebarMenuSectionProps {
+  section: MenuSection
+  currentPath: string
+}
+
+function SidebarMenuSection({ section, currentPath }: SidebarMenuSectionProps) {
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {section.items.map(item => (
+            <SidebarMenuItemLink
+              key={item.title}
+              item={item}
+              currentPath={currentPath}
+            />
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  )
+}
 
 export function AppSidebar({ user }: { user: User }) {
+  const pathname = usePathname()
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -116,59 +136,13 @@ export function AppSidebar({ user }: { user: User }) {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>منوی اصلی</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map(item => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>مدیریت</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {managementItems.map(item => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>تنظیمات</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {settingsItems.map(item => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {menuSections.map(section => (
+          <SidebarMenuSection
+            key={section.label}
+            section={section}
+            currentPath={pathname}
+          />
+        ))}
       </SidebarContent>
 
       <SidebarFooter>
