@@ -2,7 +2,7 @@
 
 import { REGEXP_ONLY_DIGITS } from "input-otp"
 import { Hotel } from "lucide-react"
-import type { ReactNode } from "react"
+import { Activity, type ReactNode } from "react"
 import ThemeButton from "@/components/shared/theme-button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -67,9 +67,7 @@ export function ErrorMessage() {
 
 // Phone Form
 export function PhoneForm() {
-  const { step, phone, setPhone, loading, handlePhoneSubmit } = useAuth()
-
-  if (step !== "phone") return null
+  const { phone, setPhone, loading, handlePhoneSubmit } = useAuth()
 
   return (
     <form onSubmit={handlePhoneSubmit} className="space-y-4" dir="rtl">
@@ -96,10 +94,8 @@ export function PhoneForm() {
 
 // Code Form
 export function CodeForm() {
-  const { step, phone, code, setCode, loading, handleCodeSubmit, handleBack } =
+  const { phone, code, setCode, loading, handleCodeSubmit, handleBack } =
     useAuth()
-
-  if (step !== "code") return null
 
   return (
     <form onSubmit={handleCodeSubmit} className="space-y-4" dir="rtl">
@@ -152,10 +148,16 @@ export function CodeForm() {
 
 // Forms Container
 export function AuthForms() {
+  const { step } = useAuth()
+
   return (
     <CardContent>
-      <PhoneForm />
-      <CodeForm />
+      <Activity mode={step === "phone" ? "visible" : "hidden"}>
+        <PhoneForm />
+      </Activity>
+      <Activity mode={step === "code" ? "visible" : "hidden"}>
+        <CodeForm />
+      </Activity>
     </CardContent>
   )
 }
