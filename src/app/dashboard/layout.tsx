@@ -23,7 +23,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <SidebarProvider className="h-screen">
+    <SidebarProvider className="animate-in zoom-in-95 fade-in h-screen">
       <AppSidebar user={user} />
       <SidebarInset className=" overflow-auto">
         <header className="flex z-50 sticky top-0 bg-background h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
