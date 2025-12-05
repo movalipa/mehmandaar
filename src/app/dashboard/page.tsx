@@ -125,7 +125,7 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">
-          خوش آمدید، {user?.name}! 👋
+          خوش آمدید، {user?.firstName}! 👋
         </h2>
         <p className="text-muted-foreground">
           خلاصه‌ای از وضعیت هتل در تاریخ ۱۴۰۴/۰۹/۰۸
