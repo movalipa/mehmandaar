@@ -31,9 +31,9 @@ export type NewOrganization = typeof organizations.$inferInsert
 
 export const users = pgTable("users", {
   id: uuid().defaultRandom().primaryKey(),
-  organizationId: uuid()
-    .notNull()
-    .references(() => organizations.id, { onDelete: "cascade" }),
+  organizationId: uuid().references(() => organizations.id, {
+    onDelete: "cascade",
+  }),
   firstName: varchar({ length: 255 }).notNull(),
   lastName: varchar({ length: 255 }).notNull(),
   phone: varchar({ length: 16 }).notNull().unique(),

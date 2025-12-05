@@ -13,7 +13,6 @@ async function main() {
     firstName: "Aref",
     lastName: "Jesus",
     phone: "09123456789",
-    organizationId: "1",
   })
   console.log("New user created!")
 

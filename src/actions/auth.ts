@@ -37,13 +37,13 @@ export async function verifyOTP(phone: string, code: string) {
     // Find valid OTP
     const otpRecord = await db
       .select()
-      .from(phoneOtpsTable)
+      .from(phoneOtps)
       .where(
         and(
-          eq(phoneOtpsTable.phone, phone),
-          eq(phoneOtpsTable.code, code),
-          gt(phoneOtpsTable.expiresAt, new Date()),
-          isNull(phoneOtpsTable.verifiedAt)
+          eq(phoneOtps.phone, phone),
+          eq(phoneOtps.code, code),
+          gt(phoneOtps.expiresAt, new Date()),
+          isNull(phoneOtps.verifiedAt)
         )
       )
       .limit(1)
@@ -57,15 +57,15 @@ export async function verifyOTP(phone: string, code: string) {
 
     // Mark OTP as verified
     await db
-      .update(phoneOtpsTable)
+      .update(phoneOtps)
       .set({ verifiedAt: new Date() })
-      .where(eq(phoneOtpsTable.id, otpRecord[0].id))
+      .where(eq(phoneOtps.id, otpRecord[0].id))
 
     // Check if user exists
     const existingUser = await db
       .select()
-      .from(usersTable)
-      .where(eq(usersTable.phone, phone))
+      .from(users)
+      .where(eq(users.phone, phone))
       .limit(1)
 
     let user: User
@@ -73,11 +73,11 @@ export async function verifyOTP(phone: string, code: string) {
     if (existingUser.length === 0) {
       // Create new user
       const newUser = await db
-        .insert(usersTable)
+        .insert(users)
         .values({
+          firstName: "New",
+          lastName: "User",
           phone,
-          name: "User", // Default name, can be updated later
-          age: 0, // Default age, can be updated later
         })
         .returning()
 
