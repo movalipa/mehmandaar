@@ -3,7 +3,7 @@
 import { and, eq, gt, isNull } from "drizzle-orm"
 import { redirect } from "next/navigation"
 import { db } from "@/db"
-import { phoneOtpsTable, type User, usersTable } from "@/db/schema"
+import { phoneOtps, type User, users } from "@/db/schema"
 import { getSession } from "@/lib/session"
 
 export async function sendOTP(phone: string) {
@@ -15,7 +15,7 @@ export async function sendOTP(phone: string) {
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
     // Save OTP to database
-    await db.insert(phoneOtpsTable).values({
+    await db.insert(phoneOtps).values({
       phone,
       code,
       expiresAt,
@@ -118,8 +118,8 @@ export async function getCurrentUser() {
   try {
     const user = await db
       .select()
-      .from(usersTable)
-      .where(eq(usersTable.id, session.userId))
+      .from(users)
+      .where(eq(users.id, session.userId))
       .limit(1)
 
     return user[0] || null

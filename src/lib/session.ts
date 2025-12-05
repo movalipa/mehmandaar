@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import { env } from "~/env"
 
 export interface SessionData {
-  userId?: number
+  userId?: string
   phone?: string
   isLoggedIn: boolean
 }
