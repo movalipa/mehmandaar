@@ -3,6 +3,7 @@ import {
   integer,
   jsonb,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -63,19 +64,23 @@ export type NewRole = typeof roles.$inferInsert
 // organization User Roles
 // =============================
 
-export const organizationUserRoles = pgTable("organization_user_roles", {
-  organizationId: uuid()
-    .notNull()
-    .references(() => organizations.id, { onDelete: "cascade" }),
-  userId: uuid()
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  roleId: integer()
-    .notNull()
-    .references(() => roles.id, { onDelete: "cascade" }),
-  assignedAt: timestamp().defaultNow().notNull(),
-  // assigned by field might be needed in future
-})
+export const organizationUserRoles = pgTable(
+  "organization_user_roles",
+  {
+    organizationId: uuid()
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    userId: uuid()
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    roleId: integer()
+      .notNull()
+      .references(() => roles.id, { onDelete: "cascade" }),
+    assignedAt: timestamp().defaultNow().notNull(),
+    // assigned by field might be needed in future
+  },
+  t => [primaryKey({ columns: [t.organizationId, t.userId, t.roleId] })]
+)
 
 export type OrganizationUserRoles = typeof organizationUserRoles.$inferSelect
 export type NewOrganizationUserRoles = typeof organizationUserRoles.$inferInsert
@@ -96,7 +101,7 @@ export const phoneOtps = pgTable(
     }).notNull(),
     verifiedAt: timestamp({ mode: "date", withTimezone: true }),
   },
-  table => [index("phone_otps_phone_idx").on(table.phone)]
+  t => [index("phone_otps_phone_idx").on(t.phone)]
 )
 
 export type PhoneOtp = typeof phoneOtps.$inferSelect
@@ -106,15 +111,19 @@ export type NewPhoneOtp = typeof phoneOtps.$inferInsert
 //
 // =============================
 
-export const hotels = pgTable("hotels", {
-  id: uuid().defaultRandom().primaryKey(),
-  organizationId: uuid()
-    .notNull()
-    .references(() => organizations.id, { onDelete: "cascade" }),
-  name: text().notNull(),
-  address: text(),
-  createdAt: timestamp().defaultNow().notNull(),
-})
+export const hotels = pgTable(
+  "hotels",
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    organizationId: uuid()
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    name: text().notNull(),
+    address: text(),
+    createdAt: timestamp().defaultNow().notNull(),
+  },
+  t => [index("hotels_org_idx").on(t.organizationId)]
+)
 
 export type Hotel = typeof hotels.$inferSelect
 export type NewHotel = typeof hotels.$inferInsert
@@ -123,18 +132,22 @@ export type NewHotel = typeof hotels.$inferInsert
 // Hotel Roles
 // =============================
 
-export const hotelUserRoles = pgTable("hotel_user_roles", {
-  hotelId: uuid()
-    .notNull()
-    .references(() => hotels.id, { onDelete: "cascade" }),
-  userId: uuid()
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  roleId: integer()
-    .notNull()
-    .references(() => roles.id, { onDelete: "cascade" }),
-  assignedAt: timestamp().defaultNow().notNull(),
-})
+export const hotelUserRoles = pgTable(
+  "hotel_user_roles",
+  {
+    hotelId: uuid()
+      .notNull()
+      .references(() => hotels.id, { onDelete: "cascade" }),
+    userId: uuid()
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    roleId: integer()
+      .notNull()
+      .references(() => roles.id, { onDelete: "cascade" }),
+    assignedAt: timestamp().defaultNow().notNull(),
+  },
+  t => [primaryKey({ columns: [t.hotelId, t.userId, t.roleId] })]
+)
 
 export type HotelUserRole = typeof hotelUserRoles.$inferSelect
 export type NewHotelUserRole = typeof hotelUserRoles.$inferInsert
@@ -143,16 +156,25 @@ export type NewHotelUserRole = typeof hotelUserRoles.$inferInsert
 // Room Group
 // =============================
 
-export const roomGroup = pgTable("room_Group", {
-  id: uuid().defaultRandom().primaryKey(),
-  name: varchar({ length: 255 }).notNull(),
-  description: text(),
-  organizationId: uuid().references(() => organizations.id, {
-    onDelete: "cascade",
-  }),
-  hotelId: uuid().references(() => hotels.id, { onDelete: "cascade" }),
-  // here both hotelId and organizationId should not be null or both be not null, only one should be set
-})
+export const roomGroup = pgTable(
+  "room_group",
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    name: varchar({ length: 255 }).notNull(),
+    description: text(),
+    organizationId: uuid()
+      .notNull()
+      .references(() => organizations.id, {
+        onDelete: "cascade",
+      }),
+    hotelId: uuid().references(() => hotels.id, { onDelete: "cascade" }),
+    // if the hotelId is set it is hotels level if not its org level
+  },
+  t => [
+    index("room_groups_org_idx").on(t.organizationId),
+    index("room_groups_hotel_idx").on(t.hotelId),
+  ]
+)
 
 export type FeatureKeys = "wifi" | "finance" // ...
 export type FeatureValues = true | false
@@ -172,27 +194,49 @@ export const rooms = pgTable(
     singleBeds: integer().default(0).notNull(),
     doubleBeds: integer().default(0).notNull(),
   },
-  t => [unique().on(t.hotelId, t.name)]
+  t => [index().on(t.hotelId), unique().on(t.hotelId, t.name)]
 )
 
-export const guests = pgTable("guests", {
-  id: uuid().defaultRandom().primaryKey(),
-  fullName: text().notNull(),
-  phone: varchar({ length: 16 }),
-  createdAt: timestamp().defaultNow().notNull(),
-  description: text(),
-})
+export const guests = pgTable(
+  "guests",
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    organizationId: uuid()
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    fullName: text().notNull(),
+    phone: varchar({ length: 16 }).unique(),
+    createdAt: timestamp().defaultNow().notNull(),
+    description: text(),
+  },
+  t => [
+    index("guests_org_idx").on(t.organizationId),
+    index("guests_org_phone_idx").on(t.organizationId, t.phone),
+  ]
+)
 
-export const reservations = pgTable("reservations", {
-  id: uuid().defaultRandom().primaryKey(),
-  guestId: uuid().references(() => guests.id, { onDelete: "set null" }),
-  roomId: uuid().references(() => rooms.id, { onDelete: "set null" }),
-  checkIn: timestamp().notNull(),
-  checkOut: timestamp().notNull(),
-  createdAt: timestamp().defaultNow().notNull(),
-  checkedInAt: timestamp(), // actual check in timestamp
-  checkedOutAt: timestamp(), // actual check out timestamp
-  status: text()
-    .$type<"reserved" | "checked-in" | "checked-out" | "cancelled">()
-    .default("reserved"),
-})
+export const reservations = pgTable(
+  "reservations",
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    organizationId: uuid()
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    guestId: uuid().references(() => guests.id, { onDelete: "set null" }),
+    roomId: uuid().references(() => rooms.id, { onDelete: "set null" }),
+    checkIn: timestamp().notNull(),
+    checkOut: timestamp().notNull(),
+    createdAt: timestamp().defaultNow().notNull(),
+    checkedInAt: timestamp(), // actual check in timestamp
+    checkedOutAt: timestamp(), // actual check out timestamp
+    status: text()
+      .$type<"reserved" | "checked-in" | "checked-out" | "cancelled">()
+      .default("reserved"),
+  },
+  t => [
+    index("res_org_idx").on(t.organizationId),
+    index("res_org_dates_idx").on(t.organizationId, t.checkIn, t.checkOut),
+    index("res_room_dates_idx").on(t.roomId, t.checkIn, t.checkOut),
+    index("res_org_status_idx").on(t.organizationId, t.status),
+  ]
+)
