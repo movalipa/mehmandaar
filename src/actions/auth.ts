@@ -1,5 +1,6 @@
 "use server"
 
+import type { UUID } from "node:crypto"
 import { and, eq, gt, isNull } from "drizzle-orm"
 import { redirect } from "next/navigation"
 import { db } from "@/db"
@@ -88,7 +89,7 @@ export async function verifyOTP(phone: string, code: string) {
 
     // Create session
     const session = await getSession()
-    session.userId = user.id
+    session.userId = user.id as UUID
     session.phone = user.phone
     session.isLoggedIn = true
     await session.save()

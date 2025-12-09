@@ -1,3 +1,4 @@
+import type { UUID } from "node:crypto"
 import {
   index,
   integer,
@@ -17,7 +18,7 @@ import {
 // =============================
 
 export const organizations = pgTable("organizations", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
   name: varchar("name", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
@@ -30,10 +31,12 @@ export type NewOrganization = typeof organizations.$inferInsert
 // =============================
 
 export const users = pgTable("users", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  organizationId: uuid("organization_id").references(() => organizations.id, {
-    onDelete: "cascade",
-  }),
+  id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
+  organizationId: uuid("organization_id")
+    .references(() => organizations.id, {
+      onDelete: "cascade",
+    })
+    .$type<UUID>(),
   firstName: varchar("first_name", { length: 255 }).notNull(),
   lastName: varchar("last_name", { length: 255 }).notNull(),
   phone: varchar("phone", { length: 16 }).notNull().unique(),
@@ -69,10 +72,12 @@ export const organizationUserRoles = pgTable(
   {
     organizationId: uuid("organization_id")
       .notNull()
-      .references(() => organizations.id, { onDelete: "cascade" }),
+      .references(() => organizations.id, { onDelete: "cascade" })
+      .$type<UUID>(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" })
+      .$type<UUID>(),
     roleId: integer("role_id")
       .notNull()
       .references(() => roles.id, { onDelete: "cascade" }),
@@ -114,10 +119,11 @@ export type NewPhoneOtp = typeof phoneOtps.$inferInsert
 export const hotels = pgTable(
   "hotels",
   {
-    id: uuid("id").defaultRandom().primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
     organizationId: uuid("organization_id")
       .notNull()
-      .references(() => organizations.id, { onDelete: "cascade" }),
+      .references(() => organizations.id, { onDelete: "cascade" })
+      .$type<UUID>(),
     name: text("name").notNull(),
     address: text("address"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -137,10 +143,12 @@ export const hotelUserRoles = pgTable(
   {
     hotelId: uuid("hotel_id")
       .notNull()
-      .references(() => hotels.id, { onDelete: "cascade" }),
+      .references(() => hotels.id, { onDelete: "cascade" })
+      .$type<UUID>(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" })
+      .$type<UUID>(),
     roleId: integer("role_id")
       .notNull()
       .references(() => roles.id, { onDelete: "cascade" }),
@@ -159,17 +167,20 @@ export type NewHotelUserRole = typeof hotelUserRoles.$inferInsert
 export const roomGroup = pgTable(
   "room_group",
   {
-    id: uuid("id").defaultRandom().primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
     name: varchar("name", { length: 255 }).notNull(),
     description: text("description"),
     organizationId: uuid("organization_id")
       .notNull()
       .references(() => organizations.id, {
         onDelete: "cascade",
-      }),
-    hotelId: uuid("hotel_id").references(() => hotels.id, {
-      onDelete: "cascade",
-    }),
+      })
+      .$type<UUID>(),
+    hotelId: uuid("hotel_id")
+      .references(() => hotels.id, {
+        onDelete: "cascade",
+      })
+      .$type<UUID>(),
     // if the hotelId is set it is hotels level if not its org level
   },
   t => [
@@ -185,13 +196,16 @@ export type Feature = Record<string, FeatureValues>
 export const rooms = pgTable(
   "rooms",
   {
-    id: uuid("id").defaultRandom().primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
     hotelId: uuid("hotel_id")
       .notNull()
-      .references(() => hotels.id, { onDelete: "cascade" }),
-    groupId: uuid("group_id").references(() => roomGroup.id, {
-      onDelete: "set null",
-    }),
+      .references(() => hotels.id, { onDelete: "cascade" })
+      .$type<UUID>(),
+    groupId: uuid("group_id")
+      .references(() => roomGroup.id, {
+        onDelete: "set null",
+      })
+      .$type<UUID>(),
     name: text("name").notNull(),
     singleBeds: integer("single_beds").default(0).notNull(),
     doubleBeds: integer("double_beds").default(0).notNull(),
@@ -202,10 +216,11 @@ export const rooms = pgTable(
 export const guests = pgTable(
   "guests",
   {
-    id: uuid("id").defaultRandom().primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
     organizationId: uuid("organization_id")
       .notNull()
-      .references(() => organizations.id, { onDelete: "cascade" }),
+      .references(() => organizations.id, { onDelete: "cascade" })
+      .$type<UUID>(),
     fullName: text("full_name").notNull(),
     phone: varchar("phone", { length: 16 }).unique(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -220,16 +235,21 @@ export const guests = pgTable(
 export const reservations = pgTable(
   "reservations",
   {
-    id: uuid("id").defaultRandom().primaryKey(),
+    id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
     organizationId: uuid("organization_id")
       .notNull()
-      .references(() => organizations.id, { onDelete: "cascade" }),
-    guestId: uuid("guest_id").references(() => guests.id, {
-      onDelete: "set null",
-    }),
-    roomId: uuid("room_id").references(() => rooms.id, {
-      onDelete: "set null",
-    }),
+      .references(() => organizations.id, { onDelete: "cascade" })
+      .$type<UUID>(),
+    guestId: uuid("guest_id")
+      .references(() => guests.id, {
+        onDelete: "set null",
+      })
+      .$type<UUID>(),
+    roomId: uuid("room_id")
+      .references(() => rooms.id, {
+        onDelete: "set null",
+      })
+      .$type<UUID>(),
     checkIn: timestamp("check_in").notNull(),
     checkOut: timestamp("check_out").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),

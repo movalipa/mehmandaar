@@ -1,9 +1,10 @@
+import type { UUID } from "node:crypto"
 import { getIronSession, type SessionOptions } from "iron-session"
 import { cookies } from "next/headers"
 import { env } from "~/env"
 
 export interface SessionData {
-  userId?: string
+  userId?: UUID
   phone?: string
   isLoggedIn: boolean
 }
