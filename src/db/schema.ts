@@ -1,4 +1,5 @@
 import type { UUID } from "node:crypto"
+import { relations } from "drizzle-orm"
 import {
   index,
   integer,
@@ -266,3 +267,130 @@ export const reservations = pgTable(
     index("res_org_status_idx").on(t.organizationId, t.status),
   ]
 )
+
+// =============================
+// RELATIONS
+// =============================
+
+// 1. Organizations Relations
+export const organizationsRelations = relations(organizations, ({ many }) => ({
+  users: many(users),
+  hotels: many(hotels),
+  roomGroups: many(roomGroup),
+  guests: many(guests),
+  reservations: many(reservations),
+  userRoles: many(organizationUserRoles),
+}))
+
+// 2. Users Relations
+export const usersRelations = relations(users, ({ one, many }) => ({
+  organization: one(organizations, {
+    fields: [users.organizationId],
+    references: [organizations.id],
+  }),
+  organizationRoles: many(organizationUserRoles),
+  hotelRoles: many(hotelUserRoles),
+}))
+
+// 3. Roles Relations
+export const rolesRelations = relations(roles, ({ many }) => ({
+  organizationAssignments: many(organizationUserRoles),
+  hotelAssignments: many(hotelUserRoles),
+}))
+
+// 4. Organization User Roles Relations (Join Table)
+export const organizationUserRolesRelations = relations(
+  organizationUserRoles,
+  ({ one }) => ({
+    organization: one(organizations, {
+      fields: [organizationUserRoles.organizationId],
+      references: [organizations.id],
+    }),
+    user: one(users, {
+      fields: [organizationUserRoles.userId],
+      references: [users.id],
+    }),
+    role: one(roles, {
+      fields: [organizationUserRoles.roleId],
+      references: [roles.id],
+    }),
+  })
+)
+
+// 5. Hotels Relations
+export const hotelsRelations = relations(hotels, ({ one, many }) => ({
+  organization: one(organizations, {
+    fields: [hotels.organizationId],
+    references: [organizations.id],
+  }),
+  rooms: many(rooms),
+  roomGroups: many(roomGroup),
+  userRoles: many(hotelUserRoles),
+}))
+
+// 6. Hotel User Roles Relations (Join Table)
+export const hotelUserRolesRelations = relations(hotelUserRoles, ({ one }) => ({
+  hotel: one(hotels, {
+    fields: [hotelUserRoles.hotelId],
+    references: [hotels.id],
+  }),
+  user: one(users, {
+    fields: [hotelUserRoles.userId],
+    references: [users.id],
+  }),
+  role: one(roles, {
+    fields: [hotelUserRoles.roleId],
+    references: [roles.id],
+  }),
+}))
+
+// 7. Room Groups Relations
+export const roomGroupRelations = relations(roomGroup, ({ one, many }) => ({
+  organization: one(organizations, {
+    fields: [roomGroup.organizationId],
+    references: [organizations.id],
+  }),
+  hotel: one(hotels, {
+    fields: [roomGroup.hotelId],
+    references: [hotels.id],
+  }),
+  rooms: many(rooms),
+}))
+
+// 8. Rooms Relations
+export const roomsRelations = relations(rooms, ({ one, many }) => ({
+  hotel: one(hotels, {
+    fields: [rooms.hotelId],
+    references: [hotels.id],
+  }),
+  group: one(roomGroup, {
+    fields: [rooms.groupId],
+    references: [roomGroup.id],
+  }),
+  reservations: many(reservations),
+}))
+
+// 9. Guests Relations
+export const guestsRelations = relations(guests, ({ one, many }) => ({
+  organization: one(organizations, {
+    fields: [guests.organizationId],
+    references: [organizations.id],
+  }),
+  reservations: many(reservations),
+}))
+
+// 10. Reservations Relations
+export const reservationsRelations = relations(reservations, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [reservations.organizationId],
+    references: [organizations.id],
+  }),
+  guest: one(guests, {
+    fields: [reservations.guestId],
+    references: [guests.id],
+  }),
+  room: one(rooms, {
+    fields: [reservations.roomId],
+    references: [rooms.id],
+  }),
+}))
