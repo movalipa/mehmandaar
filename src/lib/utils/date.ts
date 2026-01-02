@@ -56,3 +56,12 @@ export function getJalaliDate(date: Date = new Date()): string {
     day: "2-digit",
   }).format(date)
 }
+
+/**
+ * اضافه کردن روز به تاریخ
+ */
+export function addDays(date: Date, days: number): Date {
+  const result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}

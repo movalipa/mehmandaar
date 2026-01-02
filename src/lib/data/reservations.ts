@@ -1,37 +1,8 @@
 import type { UUID } from "node:crypto"
-import { desc, eq } from "drizzle-orm"
+import { and, eq, gte } from "drizzle-orm"
+import { setBrushSettings } from "recharts/types/state/brushSlice"
 import { db } from "@/db"
 import { guests, reservations, rooms } from "@/db/schema"
-
-export async function getRecentReservations(hotelId: UUID, limit = 10) {
-  return await db
-    .select({
-      id: reservations.id,
-      checkIn: reservations.checkIn,
-      checkOut: reservations.checkOut,
-      status: reservations.status,
-      createdAt: reservations.createdAt,
-      checkedInAt: reservations.checkedInAt,
-      checkedOutAt: reservations.checkedOutAt,
-      guest: {
-        id: guests.id,
-        fullName: guests.fullName,
-        phone: guests.phone,
-      },
-      room: {
-        id: rooms.id,
-        name: rooms.name,
-        singleBeds: rooms.singleBeds,
-        doubleBeds: rooms.doubleBeds,
-      },
-    })
-    .from(reservations)
-    .where(eq(reservations.hotelId, hotelId))
-    .leftJoin(guests, eq(reservations.guestId, guests.id))
-    .leftJoin(rooms, eq(reservations.roomId, rooms.id))
-    .orderBy(desc(reservations.createdAt))
-    .limit(limit)
-}
 
 export async function getAllReservations(hotelId: UUID) {
   return await db
@@ -56,17 +27,16 @@ export async function getAllReservations(hotelId: UUID) {
       },
     })
     .from(reservations)
-    .where(eq(reservations.hotelId, hotelId))
     .leftJoin(guests, eq(reservations.guestId, guests.id))
     .leftJoin(rooms, eq(reservations.roomId, rooms.id))
-    .orderBy(desc(reservations.createdAt))
+    .where(eq(reservations.hotelId, hotelId))
+    .orderBy(reservations.createdAt)
 }
 
-export async function getReservationById(reservationId: UUID) {
-  const [reservation] = await db
+export async function getReservationById(reservationId: UUID, hotelId: UUID) {
+  const result = await db
     .select({
       id: reservations.id,
-      hotelId: reservations.hotelId,
       checkIn: reservations.checkIn,
       checkOut: reservations.checkOut,
       status: reservations.status,
@@ -77,7 +47,6 @@ export async function getReservationById(reservationId: UUID) {
         id: guests.id,
         fullName: guests.fullName,
         phone: guests.phone,
-        description: guests.description,
       },
       room: {
         id: rooms.id,
@@ -87,10 +56,49 @@ export async function getReservationById(reservationId: UUID) {
       },
     })
     .from(reservations)
-    .where(eq(reservations.id, reservationId))
     .leftJoin(guests, eq(reservations.guestId, guests.id))
     .leftJoin(rooms, eq(reservations.roomId, rooms.id))
+    .where(
+      and(eq(reservations.id, reservationId), eq(reservations.hotelId, hotelId))
+    )
     .limit(1)
 
-  return reservation
+  return result[0] || null
+}
+
+export async function getRecentReservations(hotelId: UUID, days: number = 30) {
+  const startDate = new Date()
+  startDate.setDate(startDate.getDate() - days)
+
+  return await db
+    .select({
+      id: reservations.id,
+      checkIn: reservations.checkIn,
+      checkOut: reservations.checkOut,
+      status: reservations.status,
+      createdAt: reservations.createdAt,
+      checkedInAt: reservations.checkedInAt,
+      checkedOutAt: reservations.checkedOutAt,
+      guest: {
+        id: guests.id,
+        fullName: guests.fullName,
+        phone: guests.phone,
+      },
+      room: {
+        id: rooms.id,
+        name: rooms.name,
+        singleBeds: rooms.singleBeds,
+        doubleBeds: rooms.doubleBeds,
+      },
+    })
+    .from(reservations)
+    .leftJoin(guests, eq(guests.id, reservations.guestId))
+    .leftJoin(rooms, eq(rooms.id, reservations.roomId))
+    .where(
+      and(
+        eq(reservations.hotelId, hotelId),
+        gte(reservations.createdAt, startDate)
+      )
+    )
+    .orderBy(reservations.createdAt)
 }
