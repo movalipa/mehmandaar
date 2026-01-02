@@ -45,9 +45,9 @@ const menuSections: MenuSection[] = [
     label: "منوی اصلی",
     items: [
       { title: "داشبورد", url: "/dashboard", icon: Home },
-      { title: "رزرواسیون‌ها", url: "/dashboard/reservations", icon: Calendar },
       { title: "اتاق‌ها", url: "/dashboard/rooms", icon: BedDouble },
       { title: "مهمانان", url: "/dashboard/guests", icon: Users },
+      { title: "رزرواسیون‌ها", url: "/dashboard/reservations", icon: Calendar },
     ],
   },
   {

@@ -220,12 +220,17 @@ export default async function DashboardPage() {
                     <p className="text-xs text-muted-foreground">درصد پری</p>
                   </div>
                 </div>
-                <span className="text-2xl font-bold">
-                  {Math.round(
-                    (roomStatus.occupied / dashboardStats.totalRooms) * 100
-                  )}
-                  %
-                </span>
+                {dashboardStats.totalRooms === 0 ? (
+                  <span className="text-sm font-bold text-gray-500">
+                    نامشخص
+                  </span>
+                ) : (
+                  <span className="text-2xl font-bold">
+                    {" "}
+                    Math.round( (roomStatus.occupied /
+                    dashboardStats.totalRooms) * 100 )%
+                  </span>
+                )}
               </div>
             </div>
           </CardContent>
