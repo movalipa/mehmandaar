@@ -19,10 +19,10 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
+import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
 import { useAuth } from "./auth-context"
 
-// Container
 export function AuthContainer({ children }: { children: ReactNode }) {
   return (
     <div className="animate-in zoom-in-95 fade-in min-h-screen flex items-center justify-center p-4">
@@ -34,9 +34,21 @@ export function AuthContainer({ children }: { children: ReactNode }) {
   )
 }
 
-// Header
 export function AuthHeader() {
   const { step } = useAuth()
+
+  const getDescription = () => {
+    switch (step) {
+      case "phone":
+        return "شماره تلفن خود را وارد کنید"
+      case "code":
+        return "کد تایید ارسال شده را وارد کنید"
+      case "register":
+        return "اطلاعات خود را تکمیل کنید"
+      default:
+        return ""
+    }
+  }
 
   return (
     <CardHeader className="text-center gap-2 mb-4">
@@ -44,16 +56,11 @@ export function AuthHeader() {
         <Hotel size={32} />
       </div>
       <CardTitle className="text-3xl">مهماندار</CardTitle>
-      <CardDescription>
-        {step === "phone"
-          ? "شماره تلفن خود را وارد کنید"
-          : "کد تایید ارسال شده را وارد کنید"}
-      </CardDescription>
+      <CardDescription>{getDescription()}</CardDescription>
     </CardHeader>
   )
 }
 
-// Error
 export function ErrorMessage() {
   const { error } = useAuth()
   if (!error) return null
@@ -65,7 +72,6 @@ export function ErrorMessage() {
   )
 }
 
-// Phone Form
 export function PhoneForm() {
   const { phone, setPhone, loading, handlePhoneSubmit } = useAuth()
 
@@ -92,7 +98,6 @@ export function PhoneForm() {
   )
 }
 
-// Code Form
 export function CodeForm() {
   const { phone, code, setCode, loading, handleCodeSubmit, handleBack } =
     useAuth()
@@ -146,7 +151,67 @@ export function CodeForm() {
   )
 }
 
-// Forms Container
+export function RegisterForm() {
+  const {
+    firstName,
+    lastName,
+    setFirstName,
+    setLastName,
+    loading,
+    handleRegisterSubmit,
+    handleBack,
+  } = useAuth()
+
+  return (
+    <form onSubmit={handleRegisterSubmit} className="space-y-4" dir="rtl">
+      <div className="space-y-2">
+        <Label htmlFor="firstName">نام</Label>
+        <Input
+          id="firstName"
+          type="text"
+          value={firstName}
+          onChange={e => setFirstName(e.target.value)}
+          placeholder="نام خود را وارد کنید"
+          disabled={loading}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="lastName">نام خانوادگی</Label>
+        <Input
+          id="lastName"
+          type="text"
+          value={lastName}
+          onChange={e => setLastName(e.target.value)}
+          placeholder="نام خانوادگی خود را وارد کنید"
+          disabled={loading}
+          required
+        />
+      </div>
+
+      <ErrorMessage />
+
+      <div className="space-y-2">
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "در حال ثبت‌نام" : "ثبت‌نام"}
+          {loading && <Spinner />}
+        </Button>
+
+        <Button
+          type="button"
+          variant="secondary"
+          className="w-full"
+          onClick={handleBack}
+          disabled={loading}
+        >
+          بازگشت
+        </Button>
+      </div>
+    </form>
+  )
+}
+
 export function AuthForms() {
   const { step } = useAuth()
 
@@ -157,6 +222,9 @@ export function AuthForms() {
       </Activity>
       <Activity mode={step === "code" ? "visible" : "hidden"}>
         <CodeForm />
+      </Activity>
+      <Activity mode={step === "register" ? "visible" : "hidden"}>
+        <RegisterForm />
       </Activity>
     </CardContent>
   )

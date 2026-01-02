@@ -3,25 +3,20 @@
 import { and, eq, gt, isNull } from "drizzle-orm"
 import { redirect } from "next/navigation"
 import { db } from "@/db"
-import { phoneOtps, type Staff, staff } from "@/db/schema"
+import { phoneOtps, staff } from "@/db/schema"
 import { getSession } from "@/lib/session"
 
 export async function sendOTP(phone: string) {
   try {
-    // Generate 6-digit OTP
     const code = Math.floor(100000 + Math.random() * 900000).toString()
-
-    // Set expiration to 5 minutes from now
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
-    // Save OTP to database
     await db.insert(phoneOtps).values({
       phone,
       code,
       expiresAt,
     })
 
-    // Log to console (instead of sending SMS)
     console.log("📱 OTP Code for", phone, ":", code)
     console.log("⏰ Expires at:", expiresAt)
 
@@ -34,7 +29,7 @@ export async function sendOTP(phone: string) {
 
 export async function verifyOTP(phone: string, code: string) {
   try {
-    // Find valid OTP
+    // فقط بررسی می‌کنیم که OTP معتبر است، verify نمی‌کنیم
     const otpRecord = await db
       .select()
       .from(phoneOtps)
@@ -55,50 +50,122 @@ export async function verifyOTP(phone: string, code: string) {
       }
     }
 
-    // Mark OTP as verified
-    await db
-      .update(phoneOtps)
-      .set({ verifiedAt: new Date() })
-      .where(eq(phoneOtps.id, otpRecord[0].id))
-
-    // Check if user exists
     const existingUser = await db
       .select()
       .from(staff)
       .where(eq(staff.phone, phone))
       .limit(1)
 
-    let currentStaff: Staff
-
     if (existingUser.length === 0) {
-      // Create new user
-      const newUser = await db
-        .insert(staff)
-        .values({
-          firstName: "New",
-          lastName: "User",
-          phone,
-        })
-        .returning()
-
-      currentStaff = newUser[0]
-    } else {
-      currentStaff = existingUser[0]
+      // کاربر جدید - هنوز OTP را verify نکرده‌ایم
+      return {
+        success: true,
+        isNewUser: true,
+      }
     }
 
-    // Create session
+    // کاربر موجود - OTP را verify می‌کنیم و لاگین می‌کنیم
+    await db
+      .update(phoneOtps)
+      .set({ verifiedAt: new Date() })
+      .where(eq(phoneOtps.id, otpRecord[0].id))
+
+    const currentStaff = existingUser[0]
+
     const session = await getSession()
     session.userId = currentStaff.id
     session.phone = currentStaff.phone
     session.isLoggedIn = true
     await session.save()
 
-    console.log("✅ User logged in:", { userId: staff.id, phone: staff.phone })
+    console.log("✅ User logged in:", {
+      userId: currentStaff.id,
+      phone: currentStaff.phone,
+    })
 
-    return { success: true, userId: staff.id }
+    return { success: true, isNewUser: false, userId: currentStaff.id }
   } catch (error) {
     console.error("Error verifying OTP:", error)
     return { success: false, error: "تأیید کد یک‌بارمصرف ناموفق بود" }
+  }
+}
+
+export async function registerUser(
+  phone: string,
+  code: string,
+  firstName: string,
+  lastName: string
+) {
+  try {
+    // بررسی که OTP هنوز معتبر و verify نشده باشد
+    const otpRecord = await db
+      .select()
+      .from(phoneOtps)
+      .where(
+        and(
+          eq(phoneOtps.phone, phone),
+          eq(phoneOtps.code, code),
+          gt(phoneOtps.expiresAt, new Date()),
+          isNull(phoneOtps.verifiedAt)
+        )
+      )
+      .limit(1)
+
+    if (otpRecord.length === 0) {
+      return {
+        success: false,
+        error: "کد یک‌بارمصرف نامعتبر یا منقضی شده است",
+      }
+    }
+
+    // بررسی مجدد که کاربر وجود نداشته باشد
+    const existingUser = await db
+      .select()
+      .from(staff)
+      .where(eq(staff.phone, phone))
+      .limit(1)
+
+    if (existingUser.length > 0) {
+      return {
+        success: false,
+        error: "این شماره قبلاً ثبت شده است",
+      }
+    }
+
+    // ثبت کاربر جدید
+    const newUser = await db
+      .insert(staff)
+      .values({
+        firstName,
+        lastName,
+        phone,
+      })
+      .returning()
+
+    const currentStaff = newUser[0]
+
+    // حالا که کاربر ثبت شد، OTP را verify می‌کنیم
+    await db
+      .update(phoneOtps)
+      .set({ verifiedAt: new Date() })
+      .where(eq(phoneOtps.id, otpRecord[0].id))
+
+    // ایجاد سشن کاربری
+    const session = await getSession()
+    session.userId = currentStaff.id
+    session.phone = currentStaff.phone
+    session.isLoggedIn = true
+    await session.save()
+
+    console.log("✅ New user registered:", {
+      userId: currentStaff.id,
+      phone: currentStaff.phone,
+    })
+
+    return { success: true, userId: currentStaff.id }
+  } catch (error) {
+    console.error("Error registering user:", error)
+    return { success: false, error: "ثبت‌نام کاربر ناموفق بود" }
   }
 }
 
