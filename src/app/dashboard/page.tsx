@@ -1,14 +1,12 @@
 import {
-  AlertCircle,
   BedDouble,
   Calendar,
   CheckCircle2,
   Clock,
-  DollarSign,
   TrendingUp,
   Users,
 } from "lucide-react"
-import { getCurrentUser } from "@/actions/auth"
+import { requireAuth } from "@/actions/auth"
 import { NoHotelState } from "@/components/dashboard/no-hotel-state"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -19,7 +17,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   getDashboardStats,
   getRoomStatusByGroup,
@@ -30,15 +27,11 @@ import { formatDateToPersian } from "@/lib/utils/date"
 import { getStatusBadge } from "@/lib/utils/status"
 
 export default async function DashboardPage() {
-  const staff = await getCurrentUser()
+  const staff = await requireAuth()
 
-  if (!staff) return null
-
-  // بررسی وجود hotelId
   if (!staff.hotelId) {
-    return <NoHotelState staffName={staff.firstName} />
+    return <NoHotelState staffName={`${staff.firstName} ${staff.lastName}`} />
   }
-
   const [dashboardStats, roomStatus, recentReservations, todayStats] =
     await Promise.all([
       getDashboardStats(staff.hotelId),

@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation"
-import { getCurrentUser } from "@/actions/auth"
+import { requireAuth } from "@/actions/auth"
 import Clock from "@/components/shared/Clock"
 import ThemeButton from "@/components/shared/theme-button"
 import { Separator } from "@/components/ui/separator"
@@ -15,11 +14,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const staff = await getCurrentUser()
-
-  if (!staff) {
-    redirect("/login")
-  }
+  const staff = await requireAuth()
 
   return (
     <SidebarProvider className="animate-in zoom-in-95 fade-in h-screen">
