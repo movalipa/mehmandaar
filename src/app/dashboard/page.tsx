@@ -225,10 +225,13 @@ export default async function DashboardPage() {
                     نامشخص
                   </span>
                 ) : (
-                  <span className="text-2xl font-bold">
-                    {" "}
-                    Math.round( (roomStatus.occupied /
-                    dashboardStats.totalRooms) * 100 )%
+                  <span>
+                    <span className="text-2xl font-bold">
+                      {Math.round(
+                        (roomStatus.occupied / dashboardStats.totalRooms) * 100
+                      )}
+                    </span>
+                    %
                   </span>
                 )}
               </div>

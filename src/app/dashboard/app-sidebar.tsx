@@ -120,7 +120,9 @@ export function AppSidebar({ staff }: { staff: Staff }) {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <UserIcon className="h-4 w-4" />
-              <span>{staff.firstName}</span>
+              <span>
+                {staff.firstName} {staff.lastName}
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
