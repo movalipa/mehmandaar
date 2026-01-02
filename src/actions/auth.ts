@@ -1,10 +1,9 @@
 "use server"
 
-import type { UUID } from "node:crypto"
 import { and, eq, gt, isNull } from "drizzle-orm"
 import { redirect } from "next/navigation"
 import { db } from "@/db"
-import { phoneOtps, type User, users } from "@/db/schema"
+import { phoneOtps, type Staff, staff } from "@/db/schema"
 import { getSession } from "@/lib/session"
 
 export async function sendOTP(phone: string) {
@@ -65,16 +64,16 @@ export async function verifyOTP(phone: string, code: string) {
     // Check if user exists
     const existingUser = await db
       .select()
-      .from(users)
-      .where(eq(users.phone, phone))
+      .from(staff)
+      .where(eq(staff.phone, phone))
       .limit(1)
 
-    let user: User
+    let currentStaff: Staff
 
     if (existingUser.length === 0) {
       // Create new user
       const newUser = await db
-        .insert(users)
+        .insert(staff)
         .values({
           firstName: "New",
           lastName: "User",
@@ -82,21 +81,21 @@ export async function verifyOTP(phone: string, code: string) {
         })
         .returning()
 
-      user = newUser[0]
+      currentStaff = newUser[0]
     } else {
-      user = existingUser[0]
+      currentStaff = existingUser[0]
     }
 
     // Create session
     const session = await getSession()
-    session.userId = user.id as UUID
-    session.phone = user.phone
+    session.userId = currentStaff.id
+    session.phone = currentStaff.phone
     session.isLoggedIn = true
     await session.save()
 
-    console.log("✅ User logged in:", { userId: user.id, phone: user.phone })
+    console.log("✅ User logged in:", { userId: staff.id, phone: staff.phone })
 
-    return { success: true, userId: user.id }
+    return { success: true, userId: staff.id }
   } catch (error) {
     console.error("Error verifying OTP:", error)
     return { success: false, error: "تأیید کد یک‌بارمصرف ناموفق بود" }
@@ -116,16 +115,21 @@ export async function getCurrentUser() {
     return null
   }
 
-  try {
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, session.userId))
-      .limit(1)
+  const [currentStaff] = await db
+    .select()
+    .from(staff)
+    .where(eq(staff.id, session.userId))
+    .limit(1)
 
-    return user[0] || null
-  } catch (error) {
-    console.error("Error getting current user:", error)
-    return null
+  return currentStaff || null
+}
+
+export async function requireAuth() {
+  const currentStaff = await getCurrentUser()
+
+  if (!currentStaff) {
+    redirect("/login")
   }
+
+  return currentStaff
 }

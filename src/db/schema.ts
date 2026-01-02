@@ -54,7 +54,6 @@ export const staff = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey().$type<UUID>(),
     hotelId: uuid("hotel_id")
-      .notNull()
       .references(() => hotels.id, {
         onDelete: "cascade",
       })

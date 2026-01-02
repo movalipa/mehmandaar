@@ -15,15 +15,15 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const user = await getCurrentUser()
+  const staff = await getCurrentUser()
 
-  if (!user) {
+  if (!staff) {
     redirect("/login")
   }
 
   return (
     <SidebarProvider className="animate-in zoom-in-95 fade-in h-screen">
-      <AppSidebar user={user} />
+      <AppSidebar staff={staff} />
       <SidebarInset className="overflow-auto">
         <header className="flex z-50 sticky top-0 bg-background h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
           <div className="flex items-center gap-2">
@@ -36,13 +36,6 @@ export default async function DashboardLayout({
           </div>
           <div className="flex items-center gap-2">
             <Clock />
-            {/* <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-600"></span>
-            </Button> */}
             <ThemeButton variant="ghost" />
           </div>
         </header>

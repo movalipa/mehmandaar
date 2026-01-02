@@ -32,7 +32,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import type { User } from "@/db"
+import type { Staff } from "@/db/schema"
 
 interface MenuItem {
   title: string
@@ -119,7 +119,7 @@ function SidebarMenuSection({ section, currentPath }: SidebarMenuSectionProps) {
   )
 }
 
-export function AppSidebar({ user }: { user: User }) {
+export function AppSidebar({ staff }: { staff: Staff }) {
   const pathname = usePathname()
 
   return (
@@ -129,7 +129,7 @@ export function AppSidebar({ user }: { user: User }) {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <UserIcon className="h-4 w-4" />
-              <span>{user.firstName}</span>
+              <span>{staff.firstName}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
