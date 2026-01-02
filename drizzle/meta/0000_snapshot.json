@@ -1,5 +1,5 @@
 {
-  "id": "2f6432a8-5286-4cb1-959c-0c2c9df71f88",
+  "id": "6a1b9ce2-e3a1-42f8-b9b0-74c0b4315483",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -15,8 +15,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "organization_id": {
-          "name": "organization_id",
+        "hotel_id": {
+          "name": "hotel_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -48,11 +48,11 @@
         }
       },
       "indexes": {
-        "guests_org_idx": {
-          "name": "guests_org_idx",
+        "guests_hotel_idx": {
+          "name": "guests_hotel_idx",
           "columns": [
             {
-              "expression": "organization_id",
+              "expression": "hotel_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -63,11 +63,11 @@
           "method": "btree",
           "with": {}
         },
-        "guests_org_phone_idx": {
-          "name": "guests_org_phone_idx",
+        "guests_hotel_phone_idx": {
+          "name": "guests_hotel_phone_idx",
           "columns": [
             {
-              "expression": "organization_id",
+              "expression": "hotel_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -86,69 +86,9 @@
         }
       },
       "foreignKeys": {
-        "guests_organization_id_organizations_id_fk": {
-          "name": "guests_organization_id_organizations_id_fk",
+        "guests_hotel_id_hotels_id_fk": {
+          "name": "guests_hotel_id_hotels_id_fk",
           "tableFrom": "guests",
-          "tableTo": "organizations",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "guests_phone_unique": {
-          "name": "guests_phone_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "phone"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.hotel_user_roles": {
-      "name": "hotel_user_roles",
-      "schema": "",
-      "columns": {
-        "hotel_id": {
-          "name": "hotel_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role_id": {
-          "name": "role_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "assigned_at": {
-          "name": "assigned_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "hotel_user_roles_hotel_id_hotels_id_fk": {
-          "name": "hotel_user_roles_hotel_id_hotels_id_fk",
-          "tableFrom": "hotel_user_roles",
           "tableTo": "hotels",
           "columnsFrom": [
             "hotel_id"
@@ -158,44 +98,9 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        },
-        "hotel_user_roles_user_id_users_id_fk": {
-          "name": "hotel_user_roles_user_id_users_id_fk",
-          "tableFrom": "hotel_user_roles",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "hotel_user_roles_role_id_roles_id_fk": {
-          "name": "hotel_user_roles_role_id_roles_id_fk",
-          "tableFrom": "hotel_user_roles",
-          "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "hotel_user_roles_hotel_id_user_id_role_id_pk": {
-          "name": "hotel_user_roles_hotel_id_user_id_role_id_pk",
-          "columns": [
-            "hotel_id",
-            "user_id",
-            "role_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -212,12 +117,6 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "organization_id": {
-          "name": "organization_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
         "name": {
           "name": "name",
           "type": "text",
@@ -229,156 +128,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "hotels_org_idx": {
-          "name": "hotels_org_idx",
-          "columns": [
-            {
-              "expression": "organization_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "hotels_organization_id_organizations_id_fk": {
-          "name": "hotels_organization_id_organizations_id_fk",
-          "tableFrom": "hotels",
-          "tableTo": "organizations",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.organization_user_roles": {
-      "name": "organization_user_roles",
-      "schema": "",
-      "columns": {
-        "organization_id": {
-          "name": "organization_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role_id": {
-          "name": "role_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "assigned_at": {
-          "name": "assigned_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "organization_user_roles_organization_id_organizations_id_fk": {
-          "name": "organization_user_roles_organization_id_organizations_id_fk",
-          "tableFrom": "organization_user_roles",
-          "tableTo": "organizations",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "organization_user_roles_user_id_users_id_fk": {
-          "name": "organization_user_roles_user_id_users_id_fk",
-          "tableFrom": "organization_user_roles",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "organization_user_roles_role_id_roles_id_fk": {
-          "name": "organization_user_roles_role_id_roles_id_fk",
-          "tableFrom": "organization_user_roles",
-          "tableTo": "roles",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "organization_user_roles_organization_id_user_id_role_id_pk": {
-          "name": "organization_user_roles_organization_id_user_id_role_id_pk",
-          "columns": [
-            "organization_id",
-            "user_id",
-            "role_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.organizations": {
-      "name": "organizations",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -466,8 +215,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "organization_id": {
-          "name": "organization_id",
+        "hotel_id": {
+          "name": "hotel_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -517,18 +266,19 @@
         },
         "status": {
           "name": "status",
-          "type": "text",
+          "type": "reservation_status",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'reserved'"
         }
       },
       "indexes": {
-        "res_org_idx": {
-          "name": "res_org_idx",
+        "res_hotel_idx": {
+          "name": "res_hotel_idx",
           "columns": [
             {
-              "expression": "organization_id",
+              "expression": "hotel_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -539,11 +289,11 @@
           "method": "btree",
           "with": {}
         },
-        "res_org_dates_idx": {
-          "name": "res_org_dates_idx",
+        "res_hotel_dates_idx": {
+          "name": "res_hotel_dates_idx",
           "columns": [
             {
-              "expression": "organization_id",
+              "expression": "hotel_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -593,11 +343,11 @@
           "method": "btree",
           "with": {}
         },
-        "res_org_status_idx": {
-          "name": "res_org_status_idx",
+        "res_hotel_status_idx": {
+          "name": "res_hotel_status_idx",
           "columns": [
             {
-              "expression": "organization_id",
+              "expression": "hotel_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -616,12 +366,12 @@
         }
       },
       "foreignKeys": {
-        "reservations_organization_id_organizations_id_fk": {
-          "name": "reservations_organization_id_organizations_id_fk",
+        "reservations_hotel_id_hotels_id_fk": {
+          "name": "reservations_hotel_id_hotels_id_fk",
           "tableFrom": "reservations",
-          "tableTo": "organizations",
+          "tableTo": "hotels",
           "columnsFrom": [
-            "organization_id"
+            "hotel_id"
           ],
           "columnsTo": [
             "id"
@@ -662,140 +412,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.roles": {
-      "name": "roles",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "permissions": {
-          "name": "permissions",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'{}'::jsonb"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.room_group": {
-      "name": "room_group",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "organization_id": {
-          "name": "organization_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "hotel_id": {
-          "name": "hotel_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "room_groups_org_idx": {
-          "name": "room_groups_org_idx",
-          "columns": [
-            {
-              "expression": "organization_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "room_groups_hotel_idx": {
-          "name": "room_groups_hotel_idx",
-          "columns": [
-            {
-              "expression": "hotel_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "room_group_organization_id_organizations_id_fk": {
-          "name": "room_group_organization_id_organizations_id_fk",
-          "tableFrom": "room_group",
-          "tableTo": "organizations",
-          "columnsFrom": [
-            "organization_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "room_group_hotel_id_hotels_id_fk": {
-          "name": "room_group_hotel_id_hotels_id_fk",
-          "tableFrom": "room_group",
-          "tableTo": "hotels",
-          "columnsFrom": [
-            "hotel_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.rooms": {
       "name": "rooms",
       "schema": "",
@@ -812,12 +428,6 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
-        },
-        "group_id": {
-          "name": "group_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
         },
         "name": {
           "name": "name",
@@ -838,11 +448,18 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {
-        "rooms_hotel_id_index": {
-          "name": "rooms_hotel_id_index",
+        "rooms_hotel_idx": {
+          "name": "rooms_hotel_idx",
           "columns": [
             {
               "expression": "hotel_id",
@@ -870,25 +487,12 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        },
-        "rooms_group_id_room_group_id_fk": {
-          "name": "rooms_group_id_room_group_id_fk",
-          "tableFrom": "rooms",
-          "tableTo": "room_group",
-          "columnsFrom": [
-            "group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "rooms_hotelId_name_unique": {
-          "name": "rooms_hotelId_name_unique",
+        "rooms_hotel_name_unique": {
+          "name": "rooms_hotel_name_unique",
           "nullsNotDistinct": false,
           "columns": [
             "hotel_id",
@@ -900,8 +504,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.users": {
-      "name": "users",
+    "public.staff": {
+      "name": "staff",
       "schema": "",
       "columns": {
         "id": {
@@ -911,11 +515,11 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "organization_id": {
-          "name": "organization_id",
+        "hotel_id": {
+          "name": "hotel_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "first_name": {
           "name": "first_name",
@@ -935,6 +539,14 @@
           "primaryKey": false,
           "notNull": true
         },
+        "role": {
+          "name": "role",
+          "type": "staff_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'staff'"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -943,14 +555,30 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "staff_hotel_idx": {
+          "name": "staff_hotel_idx",
+          "columns": [
+            {
+              "expression": "hotel_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
-        "users_organization_id_organizations_id_fk": {
-          "name": "users_organization_id_organizations_id_fk",
-          "tableFrom": "users",
-          "tableTo": "organizations",
+        "staff_hotel_id_hotels_id_fk": {
+          "name": "staff_hotel_id_hotels_id_fk",
+          "tableFrom": "staff",
+          "tableTo": "hotels",
           "columnsFrom": [
-            "organization_id"
+            "hotel_id"
           ],
           "columnsTo": [
             "id"
@@ -961,8 +589,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_phone_unique": {
-          "name": "users_phone_unique",
+        "staff_phone_unique": {
+          "name": "staff_phone_unique",
           "nullsNotDistinct": false,
           "columns": [
             "phone"
@@ -974,7 +602,28 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.reservation_status": {
+      "name": "reservation_status",
+      "schema": "public",
+      "values": [
+        "reserved",
+        "checked-in",
+        "checked-out",
+        "cancelled"
+      ]
+    },
+    "public.staff_role": {
+      "name": "staff_role",
+      "schema": "public",
+      "values": [
+        "owner",
+        "manager",
+        "receptionist",
+        "staff"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

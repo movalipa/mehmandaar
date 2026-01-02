@@ -1,58 +1,96 @@
 import type { UUID } from "node:crypto"
-import { eq, sql } from "drizzle-orm"
+import { desc, eq } from "drizzle-orm"
 import { db } from "@/db"
 import { guests, reservations, rooms } from "@/db/schema"
 
-export type ReservationWithDetails = {
-  id: number
-  checkIn: Date | null
-  checkOut: Date | null
-  status: string | null
-  createdAt: Date | null
-  guestName: string | null
-  roomName: string | null
-}
-
-/**
- * دریافت رزروهای اخیر با جزئیات
- */
-export async function getRecentReservations(
-  organizationId: UUID,
-  limit: number = 4
-) {
-  const result = await db
+export async function getRecentReservations(hotelId: UUID, limit = 10) {
+  return await db
     .select({
       id: reservations.id,
       checkIn: reservations.checkIn,
       checkOut: reservations.checkOut,
       status: reservations.status,
       createdAt: reservations.createdAt,
-      guestName: guests.fullName,
-      roomName: rooms.name,
+      checkedInAt: reservations.checkedInAt,
+      checkedOutAt: reservations.checkedOutAt,
+      guest: {
+        id: guests.id,
+        fullName: guests.fullName,
+        phone: guests.phone,
+      },
+      room: {
+        id: rooms.id,
+        name: rooms.name,
+        singleBeds: rooms.singleBeds,
+        doubleBeds: rooms.doubleBeds,
+      },
     })
     .from(reservations)
+    .where(eq(reservations.hotelId, hotelId))
     .leftJoin(guests, eq(reservations.guestId, guests.id))
     .leftJoin(rooms, eq(reservations.roomId, rooms.id))
-    .where(eq(reservations.organizationId, organizationId))
-    .orderBy(sql`${reservations.createdAt} DESC`)
+    .orderBy(desc(reservations.createdAt))
     .limit(limit)
-
-  return result
 }
 
-/**
- * دریافت تعداد رزروها بر اساس وضعیت
- */
-export async function getReservationCountByStatus(
-  organizationId: number,
-  status: "reserved" | "checked-in" | "checked-out" | "cancelled"
-) {
-  const result = await db
-    .select({ count: sql<number>`count(*)` })
+export async function getAllReservations(hotelId: UUID) {
+  return await db
+    .select({
+      id: reservations.id,
+      checkIn: reservations.checkIn,
+      checkOut: reservations.checkOut,
+      status: reservations.status,
+      createdAt: reservations.createdAt,
+      checkedInAt: reservations.checkedInAt,
+      checkedOutAt: reservations.checkedOutAt,
+      guest: {
+        id: guests.id,
+        fullName: guests.fullName,
+        phone: guests.phone,
+      },
+      room: {
+        id: rooms.id,
+        name: rooms.name,
+        singleBeds: rooms.singleBeds,
+        doubleBeds: rooms.doubleBeds,
+      },
+    })
     .from(reservations)
-    .where(
-      sql`${reservations.organizationId} = ${organizationId} AND ${reservations.status} = ${status}`
-    )
+    .where(eq(reservations.hotelId, hotelId))
+    .leftJoin(guests, eq(reservations.guestId, guests.id))
+    .leftJoin(rooms, eq(reservations.roomId, rooms.id))
+    .orderBy(desc(reservations.createdAt))
+}
 
-  return result[0]?.count || 0
+export async function getReservationById(reservationId: UUID) {
+  const [reservation] = await db
+    .select({
+      id: reservations.id,
+      hotelId: reservations.hotelId,
+      checkIn: reservations.checkIn,
+      checkOut: reservations.checkOut,
+      status: reservations.status,
+      createdAt: reservations.createdAt,
+      checkedInAt: reservations.checkedInAt,
+      checkedOutAt: reservations.checkedOutAt,
+      guest: {
+        id: guests.id,
+        fullName: guests.fullName,
+        phone: guests.phone,
+        description: guests.description,
+      },
+      room: {
+        id: rooms.id,
+        name: rooms.name,
+        singleBeds: rooms.singleBeds,
+        doubleBeds: rooms.doubleBeds,
+      },
+    })
+    .from(reservations)
+    .where(eq(reservations.id, reservationId))
+    .leftJoin(guests, eq(reservations.guestId, guests.id))
+    .leftJoin(rooms, eq(reservations.roomId, rooms.id))
+    .limit(1)
+
+  return reservation
 }

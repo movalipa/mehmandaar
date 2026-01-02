@@ -1,4 +1,3 @@
-// components/app-sidebar.tsx
 "use client"
 
 import type { LucideIcon } from "lucide-react"
@@ -6,16 +5,12 @@ import {
   BarChart3,
   BedDouble,
   Calendar,
-  DollarSign,
-  FileText,
   Home,
   Hotel,
   LogOut,
-  MessageSquare,
-  Settings,
   UserIcon,
+  UserStar,
   Users,
-  Utensils,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -32,7 +27,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import type { User } from "@/db"
+import type { Staff } from "@/db/schema"
 
 interface MenuItem {
   title: string
@@ -53,16 +48,13 @@ const menuSections: MenuSection[] = [
       { title: "رزرواسیون‌ها", url: "/dashboard/reservations", icon: Calendar },
       { title: "اتاق‌ها", url: "/dashboard/rooms", icon: BedDouble },
       { title: "مهمانان", url: "/dashboard/guests", icon: Users },
-      { title: "مالی", url: "/dashboard/finance", icon: DollarSign },
-      { title: "رستوران", url: "/dashboard/restaurant", icon: Utensils },
     ],
   },
   {
     label: "مدیریت",
     items: [
       { title: "گزارشات", url: "/dashboard/reports", icon: BarChart3 },
-      { title: "پیام‌ها", url: "/dashboard/messages", icon: MessageSquare },
-      { title: "اسناد", url: "/dashboard/documents", icon: FileText },
+      { title: "کارمندان", url: "/dashboard/staff", icon: UserStar },
     ],
   },
   {
@@ -70,7 +62,6 @@ const menuSections: MenuSection[] = [
     items: [
       { title: "تنظیمات هتل", url: "/dashboard/hotel-settings", icon: Hotel },
       { title: "پروفایل کاربری", url: "/dashboard/profile", icon: UserIcon },
-      { title: "تنظیمات سیستم", url: "/dashboard/settings", icon: Settings },
     ],
   },
 ]
@@ -119,7 +110,7 @@ function SidebarMenuSection({ section, currentPath }: SidebarMenuSectionProps) {
   )
 }
 
-export function AppSidebar({ user }: { user: User }) {
+export function AppSidebar({ staff }: { staff: Staff }) {
   const pathname = usePathname()
 
   return (
@@ -129,7 +120,7 @@ export function AppSidebar({ user }: { user: User }) {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <UserIcon className="h-4 w-4" />
-              <span>{user.firstName}</span>
+              <span>{staff.firstName}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

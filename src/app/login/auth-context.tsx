@@ -8,25 +8,28 @@ import {
   useContext,
   useState,
 } from "react"
-import { sendOTP, verifyOTP } from "@/actions/auth"
+import { registerUser, sendOTP, verifyOTP } from "@/actions/auth"
 
-// Types
-export type Step = "phone" | "code"
+export type Step = "phone" | "code" | "register"
 
 export interface AuthContextValue {
   step: Step
   phone: string
   code: string
+  firstName: string
+  lastName: string
   loading: boolean
   error: string
   setPhone: (phone: string) => void
   setCode: (code: string) => void
+  setFirstName: (name: string) => void
+  setLastName: (name: string) => void
   handlePhoneSubmit: (e: FormEvent) => Promise<void>
   handleCodeSubmit: (e: FormEvent) => Promise<void>
+  handleRegisterSubmit: (e: FormEvent) => Promise<void>
   handleBack: () => void
 }
 
-// Context
 const AuthContext = createContext<AuthContextValue | null>(null)
 
 export const useAuth = () => {
@@ -36,12 +39,13 @@ export const useAuth = () => {
   return context
 }
 
-// Provider
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const [step, setStep] = useState<Step>("phone")
   const [phone, setPhone] = useState("")
   const [code, setCode] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -78,16 +82,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false)
 
     if (result.success) {
-      router.push("/dashboard")
-      router.refresh()
+      if (result.isNewUser) {
+        setStep("register")
+      } else {
+        router.push("/dashboard")
+        router.refresh()
+      }
     } else {
       setError(result.error || "کد تایید نامعتبر است")
     }
   }
 
+  const handleRegisterSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
+
+    if (!firstName.trim() || !lastName.trim()) {
+      setError("لطفا نام و نام خانوادگی خود را وارد کنید")
+      setLoading(false)
+      return
+    }
+
+    const result = await registerUser(
+      phone,
+      code,
+      firstName.trim(),
+      lastName.trim()
+    )
+
+    setLoading(false)
+
+    if (result.success) {
+      router.push("/dashboard")
+      router.refresh()
+    } else {
+      setError(result.error || "ثبت‌ نام با خطا مواجه شد")
+    }
+  }
+
   const handleBack = () => {
-    setStep("phone")
-    setCode("")
+    if (step === "code") {
+      setStep("phone")
+      setCode("")
+    } else if (step === "register") {
+      setStep("code")
+      setFirstName("")
+      setLastName("")
+    }
     setError("")
   }
 
@@ -97,12 +139,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         step,
         phone,
         code,
+        firstName,
+        lastName,
         loading,
         error,
         setPhone,
         setCode,
+        setFirstName,
+        setLastName,
         handlePhoneSubmit,
         handleCodeSubmit,
+        handleRegisterSubmit,
         handleBack,
       }}
     >

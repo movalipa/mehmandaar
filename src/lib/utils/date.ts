@@ -28,3 +28,31 @@ export function getStartOfTomorrow(): Date {
   tomorrow.setHours(0, 0, 0, 0)
   return tomorrow
 }
+
+// ------------------------------------------
+
+export function formatDateTimeToPersian(date: Date): string {
+  return new Intl.DateTimeFormat("fa-IR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date)
+}
+
+export function formatDateToShortPersian(date: Date): string {
+  return new Intl.DateTimeFormat("fa-IR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date)
+}
+
+export function getJalaliDate(date: Date = new Date()): string {
+  return new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date)
+}
