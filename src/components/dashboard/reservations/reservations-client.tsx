@@ -243,6 +243,7 @@ export function ReservationsClient({
           </CardHeader>
           <CardContent>
             <Tabs
+              dir="rtl"
               value={statusFilter}
               onValueChange={value => setStatusFilter(value as any)}
               className="space-y-4"
