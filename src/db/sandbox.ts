@@ -9,7 +9,7 @@ async function main() {
   await db.insert(staff).values({
     firstName: "Aref",
     lastName: "Jesus",
-    phone: "09123456789",
+    phone: "09163456789",
   })
   console.log("New user created!")
 
