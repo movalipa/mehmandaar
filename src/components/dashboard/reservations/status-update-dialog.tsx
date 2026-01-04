@@ -105,27 +105,25 @@ export function StatusUpdateDialog({
       <DialogContent className="sm:max-w-120">
         <DialogHeader>
           <DialogTitle>تغییر وضعیت رزرو</DialogTitle>
-          <DialogDescription>
-            <div className="space-y-2 mt-2">
-              <div>
-                <span className="font-medium">مهمان:</span>{" "}
-                {reservation.guest?.fullName || "نامشخص"}
-              </div>
-              <div>
-                <span className="font-medium">اتاق:</span>{" "}
-                {reservation.room?.name || "نامشخص"}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-medium">وضعیت فعلی:</span>
-                {currentStatus && (
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <currentStatus.icon className="h-3 w-3" />
-                    {currentStatus.label}
-                  </Badge>
-                )}
-              </div>
+          <div className="space-y-2 mt-2 opacity-60">
+            <div>
+              <span className="font-medium">مهمان:</span>{" "}
+              {reservation.guest?.fullName || "نامشخص"}
             </div>
-          </DialogDescription>
+            <div>
+              <span className="font-medium">اتاق:</span>{" "}
+              {reservation.room?.name || "نامشخص"}
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-medium">وضعیت فعلی:</span>
+              {currentStatus && (
+                <Badge variant="outline" className="flex items-center gap-1">
+                  <currentStatus.icon className="h-3 w-3" />
+                  {currentStatus.label}
+                </Badge>
+              )}
+            </div>
+          </div>
         </DialogHeader>
 
         <div className="space-y-2 py-4">
