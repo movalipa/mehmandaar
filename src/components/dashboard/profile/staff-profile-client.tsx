@@ -197,7 +197,7 @@ export function StaffProfileClient({ staff }: StaffProfileClientProps) {
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">شناسه کاربری:</span>
-                <span className="font-mono text-xs">{staff.id}</span>
+                <span className="font-[consolas] text-xs">{staff.id}</span>
               </div>
               <Separator />
               <div className="flex justify-between">
@@ -216,7 +216,9 @@ export function StaffProfileClient({ staff }: StaffProfileClientProps) {
                   <Separator />
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">شناسه هتل:</span>
-                    <span className="font-mono text-xs">{staff.hotelId}</span>
+                    <span className="font-[consolas] text-xs">
+                      {staff.hotelId}
+                    </span>
                   </div>
                 </>
               )}

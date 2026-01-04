@@ -143,8 +143,9 @@ export function StaffClient({
   }
 
   const canEditStaff = (targetRole: StaffRole) => {
+    if (targetRole === "owner") return false
     if (currentUserRole === "owner") return true
-    if (currentUserRole === "manager" && targetRole !== "owner") return true
+    if (currentUserRole === "manager") return true
     return false
   }
 

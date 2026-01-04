@@ -93,6 +93,11 @@ export async function updateStaff(
     throw new Error("مدیر نمی‌تواند کسی را مالک کند")
   }
 
+  // مدیر نمیتواند خودش رو عوض کنه
+  if (targetStaff[0].role === "owner") {
+    throw new Error("مالک نمی‌تواند دسترسی خودش را تغییر دهد")
+  }
+
   // اگر شماره تلفن تغییر کرده، یکتا بودن را چک کن
   if (data.phone && data.phone !== targetStaff[0].phone) {
     const existingStaff = await db

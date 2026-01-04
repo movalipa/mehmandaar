@@ -4,6 +4,7 @@ import { danaFont } from "@/fonts/font"
 import "@/app/globals.css"
 
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "مهماندار",
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className={`${danaFont.className} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

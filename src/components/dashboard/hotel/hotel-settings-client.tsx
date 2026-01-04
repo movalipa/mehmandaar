@@ -242,7 +242,7 @@ export function HotelSettingsClient({ hotel }: HotelSettingsClientProps) {
         <CardContent className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">شناسه هتل:</span>
-            <span className="font-mono">{hotel.id}</span>
+            <span className="font-[consolas]">{hotel.id}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
