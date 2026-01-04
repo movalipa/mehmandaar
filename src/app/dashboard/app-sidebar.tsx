@@ -114,7 +114,7 @@ export function AppSidebar({ staff }: { staff: Staff }) {
   const pathname = usePathname()
 
   return (
-    <Sidebar>
+    <Sidebar className="select-none">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
