@@ -11,7 +11,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -190,7 +189,7 @@ export function HotelSettingsClient({ hotel }: HotelSettingsClientProps) {
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>آیا کاملاً مطمئن هستید؟</AlertDialogTitle>
-                <AlertDialogDescription className="space-y-4">
+                <div className="text-sm opacity-80 space-y-4">
                   <p>
                     این عملیات تمام داده‌های هتل شما را به طور دائمی حذف می‌کند و
                     قابل بازگشت نیست.
@@ -208,7 +207,7 @@ export function HotelSettingsClient({ hotel }: HotelSettingsClientProps) {
                       disabled={isDeleting}
                     />
                   </div>
-                </AlertDialogDescription>
+                </div>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel disabled={isDeleting}>

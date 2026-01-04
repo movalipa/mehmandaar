@@ -1,7 +1,7 @@
 "use server"
 
 import type { UUID } from "node:crypto"
-import { and, eq } from "drizzle-orm"
+import { and, eq, gte, lte, or } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { db } from "@/db"
 import { guests, reservations, rooms } from "@/db/schema"
@@ -192,4 +192,57 @@ export async function deleteReservation(reservationId: UUID) {
   await db.delete(reservations).where(eq(reservations.id, reservationId))
 
   revalidatePath("/dashboard/reservations")
+}
+
+export async function getReservationsForTimeline(
+  startDate: Date,
+  endDate: Date
+) {
+  const staff = await requireAuth()
+
+  if (!staff.hotelId) {
+    throw new Error("هتلی برای این کاربر یافت نشد")
+  }
+
+  const reservationsList = await db
+    .select({
+      id: reservations.id,
+      checkIn: reservations.checkIn,
+      checkOut: reservations.checkOut,
+      status: reservations.status,
+      guest: {
+        id: guests.id,
+        fullName: guests.fullName,
+        phone: guests.phone,
+      },
+      room: {
+        id: rooms.id,
+        name: rooms.name,
+      },
+    })
+    .from(reservations)
+    .leftJoin(guests, eq(reservations.guestId, guests.id))
+    .leftJoin(rooms, eq(reservations.roomId, rooms.id))
+    .where(
+      and(
+        eq(reservations.hotelId, staff.hotelId),
+        or(
+          and(
+            gte(reservations.checkIn, startDate),
+            lte(reservations.checkIn, endDate)
+          ),
+          and(
+            gte(reservations.checkOut, startDate),
+            lte(reservations.checkOut, endDate)
+          ),
+          and(
+            lte(reservations.checkIn, startDate),
+            gte(reservations.checkOut, endDate)
+          )
+        )
+      )
+    )
+    .orderBy(reservations.checkIn)
+
+  return reservationsList
 }

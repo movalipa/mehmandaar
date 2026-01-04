@@ -5,6 +5,7 @@ import {
   BarChart3,
   BedDouble,
   Calendar,
+  ChartGantt,
   Home,
   Hotel,
   LogOut,
@@ -48,6 +49,7 @@ const menuSections: MenuSection[] = [
       { title: "اتاق‌ها", url: "/dashboard/rooms", icon: BedDouble },
       { title: "مهمانان", url: "/dashboard/guests", icon: Users },
       { title: "رزرواسیون‌ها", url: "/dashboard/reservations", icon: Calendar },
+      { title: "جدول‌زمانی", url: "/dashboard/timeline", icon: ChartGantt },
     ],
   },
   {
