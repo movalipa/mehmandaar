@@ -120,6 +120,5 @@
     @apply bg-background text-foreground;
     font-family: "Dana", sans-serif;
     font-feature-settings: "ss02"; /* to make numbers persian */
-    user-select: none;
   }
 }

@@ -53,8 +53,8 @@ const menuSections: MenuSection[] = [
   {
     label: "مدیریت",
     items: [
-      { title: "گزارشات", url: "/dashboard/reports", icon: BarChart3 },
       { title: "کارمندان", url: "/dashboard/staff", icon: UserStar },
+      { title: "گزارشات", url: "/dashboard/reports", icon: BarChart3 },
     ],
   },
   {
