@@ -21,7 +21,6 @@ export async function updateProfile(data: {
     return { success: false, error: "شماره تلفن الزامی است." }
   }
 
-  // اعتبارسنجی فرمت شماره تلفن (ساده)
   const phoneRegex = /^(\+98|0)?9\d{9}$/
   if (!phoneRegex.test(data.phone.replace(/\s/g, ""))) {
     return {
@@ -31,7 +30,6 @@ export async function updateProfile(data: {
   }
 
   try {
-    // چک کردن تکراری نبودن شماره تلفن
     if (data.phone !== currentStaff.phone) {
       const existingStaff = await db
         .select()

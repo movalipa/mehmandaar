@@ -1,4 +1,9 @@
-import { AuthContainer, AuthForms, AuthHeader } from "./auth-components"
+import {
+  AuthContainer,
+  AuthForms,
+  AuthHeader,
+  ParticlesComp,
+} from "./auth-components"
 import { AuthProvider } from "./auth-context"
 
 export default function LoginPage() {
@@ -8,6 +13,7 @@ export default function LoginPage() {
         <AuthHeader />
         <AuthForms />
       </AuthContainer>
+      <ParticlesComp />
     </AuthProvider>
   )
 }

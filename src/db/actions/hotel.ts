@@ -41,7 +41,7 @@ export async function registerHotel(formData: {
       .update(staff)
       .set({
         hotelId: newHotel.id,
-        role: "manager", // به عنوان مدیر هتل
+        role: "manager",
       })
       .where(eq(staff.id, currentStaff.id))
 
@@ -69,7 +69,6 @@ export async function updateHotel(
 ) {
   const currentStaff = await requireAuth()
 
-  // فقط owner می‌تواند تنظیمات هتل را تغییر دهد
   if (currentStaff.role !== "owner") {
     return {
       success: false,
@@ -105,7 +104,6 @@ export async function updateHotel(
 export async function deleteHotel(hotelId: UUID) {
   const currentStaff = await requireAuth()
 
-  // فقط owner می‌تواند هتل را حذف کند
   if (currentStaff.role !== "owner") {
     return { success: false, error: "فقط مالک می‌تواند هتل را حذف کند." }
   }
@@ -115,10 +113,8 @@ export async function deleteHotel(hotelId: UUID) {
   }
 
   try {
-    // حذف هتل - به دلیل cascade تمام داده‌های مرتبط حذف می‌شوند
     await db.delete(hotels).where(eq(hotels.id, hotelId))
 
-    // ریدایرکت به صفحه اصلی یا لاگین
     redirect("/")
   } catch (error) {
     console.error("Error deleting hotel:", error)

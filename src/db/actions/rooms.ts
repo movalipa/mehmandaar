@@ -45,7 +45,6 @@ export async function updateRoom(
     throw new Error("هتلی به کاربر اختصاص نداده شده است")
   }
 
-  // بررسی اینکه اتاق متعلق به هتل کاربر است
   const existingRoom = await db
     .select()
     .from(rooms)
@@ -77,7 +76,6 @@ export async function deleteRoom(roomId: UUID) {
     throw new Error("هتلی به کاربر اختصاص نداده شده است")
   }
 
-  // بررسی اینکه اتاق متعلق به هتل کاربر است
   const existingRoom = await db
     .select()
     .from(rooms)

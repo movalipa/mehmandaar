@@ -29,7 +29,6 @@ export async function sendOTP(phone: string) {
 
 export async function verifyOTP(phone: string, code: string) {
   try {
-    // فقط بررسی می‌کنیم که OTP معتبر است، verify نمی‌کنیم
     const otpRecord = await db
       .select()
       .from(phoneOtps)
@@ -57,14 +56,12 @@ export async function verifyOTP(phone: string, code: string) {
       .limit(1)
 
     if (existingUser.length === 0) {
-      // کاربر جدید - هنوز OTP را verify نکرده‌ایم
       return {
         success: true,
         isNewUser: true,
       }
     }
 
-    // کاربر موجود - OTP را verify می‌کنیم و لاگین می‌کنیم
     await db
       .update(phoneOtps)
       .set({ verifiedAt: new Date() })
@@ -97,7 +94,6 @@ export async function registerUser(
   lastName: string
 ) {
   try {
-    // بررسی که OTP هنوز معتبر و verify نشده باشد
     const otpRecord = await db
       .select()
       .from(phoneOtps)
@@ -118,7 +114,6 @@ export async function registerUser(
       }
     }
 
-    // بررسی مجدد که کاربر وجود نداشته باشد
     const existingUser = await db
       .select()
       .from(staff)
@@ -132,7 +127,6 @@ export async function registerUser(
       }
     }
 
-    // ثبت کاربر جدید
     const newUser = await db
       .insert(staff)
       .values({
@@ -144,13 +138,11 @@ export async function registerUser(
 
     const currentStaff = newUser[0]
 
-    // حالا که کاربر ثبت شد، OTP را verify می‌کنیم
     await db
       .update(phoneOtps)
       .set({ verifiedAt: new Date() })
       .where(eq(phoneOtps.id, otpRecord[0].id))
 
-    // ایجاد سشن کاربری
     const session = await getSession()
     session.userId = currentStaff.id
     session.phone = currentStaff.phone

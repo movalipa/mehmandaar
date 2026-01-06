@@ -14,6 +14,7 @@ import {
   Zap,
 } from "lucide-react"
 import Link from "next/link"
+import ThemeButton from "@/components/shared/theme-button"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -26,50 +27,53 @@ import {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-teal-50 to-cyan-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+    <div className="animate-in fade-in slide-in-from-top-5 min-h-screen bg-linear-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <header className="border-b bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50 dark:border-slate-800">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Hotel className="h-9 w-9 text-emerald-600" />
-              <Sparkles className="h-4 w-4 text-amber-500 absolute -top-1 -right-1" />
+              <Hotel className="h-9 w-9 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
-              <span className="text-2xl font-bold text-slate-900">
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 مهماندار
               </span>
-              <p className="text-xs text-slate-500 -mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-400 -mt-1">
                 سامانه هوشمند مدیریت هتل
               </p>
             </div>
           </div>
-          <Link href="/login">
-            <Button
-              variant="default"
-              className="gap-2 bg-emerald-600 hover:bg-emerald-700"
-            >
-              ورود به سامانه
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
+          <div className="flex gap-2 justify-center items-center">
+            <ThemeButton />
+            <Link href="/login">
+              <Button
+                variant="default"
+                className="gap-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+              >
+                ورود/ثبت‌نام
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
         <Badge
-          className="mb-4 bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+          className="mb-4 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50"
           variant="secondary"
         >
           🏨 سامانه مدیریت هوشمند هتل
         </Badge>
-        <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-          با <span className="text-emerald-600">مهماندار</span>
+        <h1 className="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+          با{" "}
+          <span className="text-emerald-600 dark:text-emerald-400">
+            مهماندار
+          </span>
           <br />
           میزبانی حرفه‌ای‌تر باشید
         </h1>
-        <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
           سامانه جامع مدیریت هتل که تجربه میزبانی را برای شما و مهمان‌هایتان
           <br />
           به یک تجربه لذت‌بخش و بدون دردسر تبدیل می‌کند
@@ -78,7 +82,7 @@ export default function LandingPage() {
           <Link href="/login">
             <Button
               size="lg"
-              className="gap-2 text-lg px-8 bg-emerald-600 hover:bg-emerald-700"
+              className="gap-2 text-lg px-8 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
             >
               شروع رایگان
               <ArrowLeft className="h-5 w-5" />
@@ -87,15 +91,14 @@ export default function LandingPage() {
           <Button
             size="lg"
             variant="outline"
-            className="text-lg px-8 border-emerald-200 hover:bg-emerald-50"
+            className="text-lg px-8 border-emerald-200 hover:bg-emerald-50 dark:border-emerald-800 dark:hover:bg-emerald-950/50 dark:text-emerald-400"
           >
             تماشای ویدیو معرفی
           </Button>
         </div>
 
-        {/* Hero Image Placeholder */}
         <div className="mt-16 relative">
-          <div className="bg-linear-to-br from-emerald-400 to-teal-500 rounded-2xl shadow-2xl p-8 max-w-5xl mx-auto aspect-video flex items-center justify-center border-8 border-white">
+          <div className="bg-linear-to-br from-emerald-400 to-teal-500 dark:from-emerald-600 dark:to-teal-700 rounded-2xl shadow-2xl p-8 max-w-5xl mx-auto aspect-video flex items-center justify-center border-8 border-white dark:border-slate-800">
             <div className="text-white text-center">
               <Hotel className="h-24 w-24 mx-auto mb-4 opacity-50" />
               <p className="text-2xl font-semibold opacity-75">
@@ -103,35 +106,37 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-          {/* Floating Elements */}
-          <div className="absolute -top-4 -right-4 bg-white rounded-xl shadow-lg p-4 hidden md:block">
+          <div className="absolute -top-4 -right-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-4 hidden md:block dark:border dark:border-slate-700">
             <div className="flex items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
-              <span className="text-sm font-semibold">۱۲ رزرو جدید</span>
+              <span className="text-sm font-semibold dark:text-white">
+                ۱۲ رزرو جدید
+              </span>
             </div>
           </div>
-          <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg p-4 hidden md:block">
+          <div className="absolute -bottom-4 -left-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-4 hidden md:block dark:border dark:border-slate-700">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-emerald-600" />
-              <span className="text-sm font-semibold">۸۵٪ اشغال</span>
+              <TrendingUp className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-sm font-semibold dark:text-white">
+                ۸۵٪ اشغال
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-12">
           <Badge
-            className="mb-4 bg-amber-100 text-amber-700"
+            className="mb-4 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
             variant="secondary"
           >
             ⚡ امکانات
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
             همه‌چیز برای مدیریت بهتر
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
             ابزارهایی که نیاز دارید، همه در یک جا
           </p>
         </div>
@@ -176,12 +181,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Why Section */}
-      <section className="bg-slate-900 text-white py-20">
+      <section className="bg-slate-900 dark:bg-slate-950 text-white py-20 dark:border-y dark:border-slate-800">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+              <Badge className="mb-4 bg-emerald-500/20 text-emerald-400 border-emerald-500/30 dark:bg-emerald-500/10 dark:border-emerald-500/20">
                 💎 چرا مهماندار؟
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -200,7 +204,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="space-y-6">
-              <Card className="bg-slate-800 border-slate-700">
+              <Card className="bg-slate-800 border-slate-700 dark:bg-slate-900 dark:border-slate-800">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Zap className="h-5 w-5 text-amber-400" />
@@ -227,13 +231,15 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-12">
-          <Badge className="mb-4 bg-blue-100 text-blue-700" variant="secondary">
+          <Badge
+            className="mb-4 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+            variant="secondary"
+          >
             💬 نظرات کاربران
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
             هتل‌ها درباره ما می‌گویند
           </h2>
         </div>
@@ -257,10 +263,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
-        <div className="bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 rounded-3xl p-12 text-white text-center relative overflow-hidden">
-          {/* Background Pattern */}
+        <div className="bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-700 dark:via-teal-700 dark:to-cyan-700 rounded-3xl p-12 text-white text-center relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-10 left-10 w-20 h-20 border-4 border-white rounded-full"></div>
             <div className="absolute bottom-10 right-10 w-32 h-32 border-4 border-white rounded-full"></div>
@@ -268,7 +272,7 @@ export default function LandingPage() {
           </div>
 
           <div className="relative z-10">
-            <Sparkles className="h-12 w-12 mx-auto mb-4 text-amber-300" />
+            <Sparkles className="h-12 w-12 mx-auto mb-4 text-amber-300 dark:text-amber-200" />
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               آماده برای میزبانی بهتر؟
             </h2>
@@ -302,73 +306,96 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-white py-12">
+      <footer className="border-t bg-white dark:bg-slate-950 py-12 dark:border-slate-800">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Hotel className="h-6 w-6 text-emerald-600" />
-                <span className="text-xl font-bold text-slate-900">
+                <Hotel className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-xl font-bold text-slate-900 dark:text-white">
                   مهماندار
                 </span>
               </div>
-              <p className="text-slate-600 text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                 سامانه هوشمند مدیریت هتل
                 <br />
                 برای میزبانی حرفه‌ای‌تر
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 mb-3">محصول</h3>
-              <ul className="space-y-2 text-sm text-slate-600">
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-3">
+                محصول
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                 <li>
-                  <a href="#" className="hover:text-emerald-600">
+                  <a
+                    href="#"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                  >
                     امکانات
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-600">
+                  <a
+                    href="#"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                  >
                     قیمت‌گذاری
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-600">
+                  <a
+                    href="#"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                  >
                     دمو
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 mb-3">پشتیبانی</h3>
-              <ul className="space-y-2 text-sm text-slate-600">
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-3">
+                پشتیبانی
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                 <li>
-                  <a href="#" className="hover:text-emerald-600">
+                  <a
+                    href="#"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                  >
                     مستندات
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-600">
+                  <a
+                    href="#"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                  >
                     راهنما
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-600">
+                  <a
+                    href="#"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
+                  >
                     تماس با ما
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 mb-3">تماس</h3>
-              <ul className="space-y-2 text-sm text-slate-600">
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-3">
+                تماس
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                 <li>📞 ۰۲۱-۱۲۳۴۵۶۷۸</li>
                 <li>📧 info@mehmandaar.ir</li>
                 <li>🏢 تهران، ایران</li>
               </ul>
             </div>
           </div>
-          <div className="border-t pt-8 text-center text-slate-600 text-sm">
+          <div className="border-t dark:border-slate-800 pt-8 text-center text-slate-600 dark:text-slate-400 text-sm">
             <p>© ۱۴۰۴ مهماندار - تمامی حقوق محفوظ است</p>
           </div>
         </div>
@@ -377,7 +404,6 @@ export default function LandingPage() {
   )
 }
 
-// Sub Components
 function FeatureCard({
   icon,
   title,
@@ -390,15 +416,15 @@ function FeatureCard({
   gradient: string
 }) {
   return (
-    <Card className="border-2 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+    <Card className="border-2 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 dark:bg-slate-900 dark:border-slate-800">
       <CardHeader>
         <div
           className={`w-16 h-16 rounded-2xl bg-linear-to-br ${gradient} flex items-center justify-center text-white mb-4 shadow-lg`}
         >
           {icon}
         </div>
-        <CardTitle className="text-xl">{title}</CardTitle>
-        <CardDescription className="text-base leading-relaxed">
+        <CardTitle className="text-xl dark:text-white">{title}</CardTitle>
+        <CardDescription className="text-base leading-relaxed dark:text-slate-400">
           {description}
         </CardDescription>
       </CardHeader>
@@ -409,7 +435,7 @@ function FeatureCard({
 function BenefitItem({ text }: { text: string }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="h-6 w-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5">
+      <div className="h-6 w-6 rounded-full bg-emerald-500 dark:bg-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
         <Check className="h-4 w-4 text-white" />
       </div>
       <span className="text-lg">{text}</span>
@@ -434,14 +460,16 @@ function StatCard({
   }
 
   return (
-    <div className="flex items-center justify-between p-4 bg-slate-900/50 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-slate-900/50 dark:bg-slate-950/50 rounded-lg">
       <div>
         <div
           className={`text-3xl font-bold ${colorClasses[color as keyof typeof colorClasses]} mb-1`}
         >
           {number}
         </div>
-        <div className="text-slate-400 text-sm">{label}</div>
+        <div className="text-slate-400 dark:text-slate-500 text-sm">
+          {label}
+        </div>
       </div>
     </div>
   )
@@ -457,16 +485,22 @@ function TestimonialCard({
   roles: string
 }) {
   return (
-    <Card className="border-2 hover:shadow-lg transition-shadow">
+    <Card className="border-2 hover:shadow-lg transition-shadow dark:bg-slate-900 dark:border-slate-800">
       <CardContent className="pt-6">
-        <p className="text-slate-700 mb-4 leading-relaxed">"{text}"</p>
+        <p className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed">
+          "{text}"
+        </p>
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold">
+          <div className="h-10 w-10 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 dark:from-emerald-600 dark:to-teal-700 flex items-center justify-center text-white font-bold">
             {author.charAt(0)}
           </div>
           <div>
-            <p className="font-semibold text-slate-900">{author}</p>
-            <p className="text-sm text-slate-500">{roles}</p>
+            <p className="font-semibold text-slate-900 dark:text-white">
+              {author}
+            </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {roles}
+            </p>
           </div>
         </div>
       </CardContent>

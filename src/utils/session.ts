@@ -17,7 +17,7 @@ export const sessionOptions: SessionOptions = {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   },
-  ttl: 60 * 60 * 24 * 7, // // 7 days
+  ttl: 60 * 60 * 24 * 7, // 7 days
 }
 
 export async function getSession() {

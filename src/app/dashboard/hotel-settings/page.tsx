@@ -28,7 +28,6 @@ export default async function HotelSettingsPage() {
     )
   }
 
-  // فقط owner می‌تواند تنظیمات هتل را مشاهده کند
   if (staff.role !== "owner") {
     return (
       <div className="flex items-center justify-center h-[50vh]">

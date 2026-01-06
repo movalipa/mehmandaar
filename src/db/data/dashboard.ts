@@ -14,21 +14,18 @@ export async function getDashboardStats(
   hotelId: UUID
 ): Promise<DashboardStats> {
   const [roomsCount, guestsCount, activeReservationsCount] = await Promise.all([
-    // تعداد کل اتاق‌ها
     db
       .select({ count: count() })
       .from(rooms)
       .where(eq(rooms.hotelId, hotelId))
       .then(result => result[0]?.count ?? 0),
 
-    // تعداد کل مهمانان
     db
       .select({ count: count() })
       .from(guests)
       .where(eq(guests.hotelId, hotelId))
       .then(result => result[0]?.count ?? 0),
 
-    // تعداد رزروهای فعال (checked-in)
     db
       .select({ count: count() })
       .from(reservations)
@@ -60,7 +57,6 @@ export async function getRoomStatusByGroup(
 ): Promise<RoomStatusGroup> {
   const now = new Date()
 
-  // اتاق‌هایی که الان اشغال هستند
   const occupiedRooms = await db
     .select({ roomId: reservations.roomId })
     .from(reservations)
@@ -74,7 +70,6 @@ export async function getRoomStatusByGroup(
     )
     .then(results => new Set(results.map(r => r.roomId)))
 
-  // تعداد کل اتاق‌ها
   const allRooms = await db
     .select({ id: rooms.id })
     .from(rooms)
@@ -83,7 +78,6 @@ export async function getRoomStatusByGroup(
   const totalRooms = allRooms.length
   const occupied = occupiedRooms.size
 
-  // فرض: 10% اتاق‌ها در حال تمیزکاری
   const cleaning = Math.floor(totalRooms * 0.1)
   const available = totalRooms - occupied - cleaning
 

@@ -42,7 +42,6 @@ export async function updateGuest(
     throw new Error("هتلی برای این کاربر یافت نشد")
   }
 
-  // بررسی اینکه مهمان متعلق به هتل این staff است
   const guest = await db
     .select()
     .from(guests)
@@ -72,7 +71,6 @@ export async function deleteGuest(guestId: UUID) {
     throw new Error("هتلی برای این کاربر یافت نشد")
   }
 
-  // بررسی اینکه مهمان متعلق به هتل این staff است
   const guest = await db
     .select()
     .from(guests)

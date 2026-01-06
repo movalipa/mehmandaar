@@ -1,7 +1,9 @@
 "use client"
 
 import { REGEXP_ONLY_DIGITS } from "input-otp"
-import { Hotel } from "lucide-react"
+import { ArrowLeft, Hotel } from "lucide-react"
+import Link from "next/link"
+import { useTheme } from "next-themes"
 import { Activity, type ReactNode } from "react"
 import ThemeButton from "@/components/shared/theme-button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -20,14 +22,20 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { Label } from "@/components/ui/label"
+import { Particles } from "@/components/ui/magicui/particles"
 import { Spinner } from "@/components/ui/spinner"
 import { useAuth } from "./auth-context"
 
 export function AuthContainer({ children }: { children: ReactNode }) {
   return (
     <div className="animate-in zoom-in-95 fade-in min-h-screen flex items-center justify-center p-4">
-      <div className="absolute top-4 left-4">
+      <div className="absolute flex gap-2 top-4 left-4 items-center">
         <ThemeButton />
+        <Link href="/">
+          <Button>
+            صفحه اصلی <ArrowLeft />
+          </Button>
+        </Link>
       </div>
       <Card className="w-full max-w-sm">{children}</Card>
     </div>
@@ -227,5 +235,19 @@ export function AuthForms() {
         <RegisterForm />
       </Activity>
     </CardContent>
+  )
+}
+
+export const ParticlesComp = () => {
+  const { resolvedTheme } = useTheme()
+  return (
+    <Particles
+      className="absolute inset-0 -z-1 overflow-hidden"
+      quantity={100}
+      ease={80}
+      color={resolvedTheme === "dark" ? "#ffffff" : "#000000"}
+      refresh
+      size={1}
+    />
   )
 }
