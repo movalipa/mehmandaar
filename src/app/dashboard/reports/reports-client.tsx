@@ -62,7 +62,6 @@ interface ReportsClientProps {
 }
 
 export function ReportsClient({ data, userRole }: ReportsClientProps) {
-  // سطح دسترسی: owner و manager دسترسی کامل، receptionist دسترسی محدود
   const canDownloadReports = userRole === "owner" || userRole === "manager"
   const canViewFinancial = userRole === "owner" || userRole === "manager"
 

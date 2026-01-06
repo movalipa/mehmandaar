@@ -1,4 +1,3 @@
-// components/dashboard/staff/staff-dialog.tsx
 "use client"
 
 import type { UUID } from "node:crypto"
@@ -111,7 +110,6 @@ export function StaffDialog({
     }
   }
 
-  // نقش‌هایی که کاربر فعلی می‌تواند انتخاب کند
   const availableRoles =
     currentUserRole === "owner"
       ? ["owner", "manager", "receptionist", "staff"]

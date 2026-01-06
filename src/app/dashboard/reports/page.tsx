@@ -26,7 +26,6 @@ export default async function ReportsPage() {
     )
   }
 
-  // چک کردن سطح دسترسی - فقط owner، manager و receptionist
   if (staff.role !== "owner" && staff.role !== "manager") {
     return (
       <div className="flex items-center justify-center h-[50vh]">

@@ -1,4 +1,3 @@
-// components/dashboard/settings/hotel-settings-client.tsx
 "use client"
 
 import type { UUID } from "node:crypto"
@@ -78,7 +77,6 @@ export function HotelSettingsClient({ hotel }: HotelSettingsClientProps) {
       toast.error(result.error || "خطا در حذف هتل")
       setIsDeleting(false)
     }
-    // اگر موفق باشد، به صفحه اصلی ریدایرکت می‌شود
   }
 
   const hasChanges =

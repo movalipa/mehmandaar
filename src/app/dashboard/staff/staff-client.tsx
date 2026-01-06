@@ -1,4 +1,3 @@
-// components/dashboard/staff/staff-client.tsx
 "use client"
 
 import type { UUID } from "node:crypto"

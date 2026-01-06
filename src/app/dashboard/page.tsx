@@ -73,7 +73,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
       <div>
         <h2 className="text-3xl font-bold tracking-tight">
           خوش آمدید، {staff.firstName}! 👋
@@ -83,7 +82,6 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map(stat => (
           <Card key={stat.title}>
@@ -108,9 +106,7 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      {/* Main Content */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        {/* Room Status */}
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>وضعیت اتاق‌ها</CardTitle>
@@ -168,7 +164,6 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Today's Activity */}
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>فعالیت امروز</CardTitle>
@@ -240,7 +235,6 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      {/* Recent Reservations */}
       <Card>
         <CardHeader>
           <CardTitle>آخرین رزرواسیون‌ها</CardTitle>

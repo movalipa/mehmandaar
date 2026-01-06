@@ -1,5 +1,3 @@
-// app/dashboard/guests/page.tsx
-
 import { GuestsClient } from "@/app/dashboard/guests/guests-client"
 import {
   Card,

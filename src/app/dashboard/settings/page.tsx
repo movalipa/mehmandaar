@@ -1,5 +1,3 @@
-// app/dashboard/settings/page.tsx
-
 import { Bell, Database, Globe, Lock, Mail, Palette, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {

@@ -61,7 +61,6 @@ export function RegisterHotelForm({ staffName }: RegisterHotelFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* نام هتل */}
           <div className="space-y-2">
             <Label htmlFor="name" className="flex items-center gap-2">
               <Building2 className="h-4 w-4 text-primary" />
@@ -80,7 +79,6 @@ export function RegisterHotelForm({ staffName }: RegisterHotelFormProps) {
             <p className="text-xs text-muted-foreground">حداقل ۳ کاراکتر</p>
           </div>
 
-          {/* آدرس */}
           <div className="space-y-2">
             <Label htmlFor="address" className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
@@ -100,7 +98,6 @@ export function RegisterHotelForm({ staffName }: RegisterHotelFormProps) {
             />
           </div>
 
-          {/* پیام خطا */}
           {error && (
             <Alert
               variant="destructive"
@@ -110,7 +107,6 @@ export function RegisterHotelForm({ staffName }: RegisterHotelFormProps) {
             </Alert>
           )}
 
-          {/* اطلاعات مدیر */}
           <div className="p-3 bg-primary/5 rounded-lg border border-primary/10">
             <div className="flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
@@ -123,7 +119,6 @@ export function RegisterHotelForm({ staffName }: RegisterHotelFormProps) {
             </div>
           </div>
 
-          {/* دکمه‌های عملیات */}
           <div className="flex gap-3 pt-2">
             <Button
               type="button"

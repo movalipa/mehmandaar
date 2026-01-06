@@ -69,7 +69,6 @@ export function TimelineGrid({
     }
   }
 
-  // محاسبه position برای RTL - از راست به چپ
   const calculatePosition = (checkIn: Date, checkOut: Date) => {
     const gridStart = dateRange.start.getTime()
     const gridEnd = dateRange.end.getTime()
@@ -78,7 +77,6 @@ export function TimelineGrid({
     const reservationStart = Math.max(new Date(checkIn).getTime(), gridStart)
     const reservationEnd = Math.min(new Date(checkOut).getTime(), gridEnd)
 
-    // برای RTL از راست محاسبه می‌کنیم
     const right = ((reservationStart - gridStart) / totalDuration) * 100
     const width = ((reservationEnd - reservationStart) / totalDuration) * 100
 
@@ -98,7 +96,6 @@ export function TimelineGrid({
       dir="rtl"
     >
       <div className="min-w-max">
-        {/* Header with dates */}
         <div className="flex sticky top-0 bg-background z-20 border-b">
           <div className="w-40 p-3 border-r font-semibold bg-muted/50 shrink-0">
             اتاق
@@ -135,7 +132,6 @@ export function TimelineGrid({
           </div>
         </div>
 
-        {/* Rooms and reservations */}
         {rooms.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             هیچ اتاقی یافت نشد
@@ -162,7 +158,6 @@ export function TimelineGrid({
                   className="flex-1 relative"
                   style={{ minHeight: minCellHeight }}
                 >
-                  {/* Date cells background */}
                   <div className="flex absolute inset-0">
                     {dates.map(date => {
                       const isToday = date.getTime() === today.getTime()
@@ -179,7 +174,6 @@ export function TimelineGrid({
                     })}
                   </div>
 
-                  {/* Reservations */}
                   <div className="absolute inset-0 p-1">
                     {roomReservations.map(reservation => {
                       const position = calculatePosition(
@@ -230,7 +224,6 @@ export function TimelineGrid({
         )}
       </div>
 
-      {/* Legend */}
       <div className="mt-4 flex items-center gap-4 text-sm">
         <span className="text-muted-foreground">وضعیت:</span>
         <div className="flex items-center gap-2">
