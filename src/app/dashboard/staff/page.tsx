@@ -1,5 +1,5 @@
 import { requireAuth } from "@/actions/auth"
-import { StaffClient } from "@/components/dashboard/staff/staff-client"
+import { StaffClient } from "@/app/dashboard/staff/staff-client"
 import {
   Card,
   CardDescription,
@@ -44,7 +44,6 @@ export default async function StaffPage() {
 
   const staffList = await getAllStaff(currentStaff.hotelId)
 
-  // محاسبه آمار
   const stats = {
     total: staffList.length,
     owner: staffList.filter(s => s.role === "owner").length,
@@ -57,7 +56,6 @@ export default async function StaffPage() {
     <StaffClient
       staffList={staffList}
       stats={stats}
-      hotelId={currentStaff.hotelId}
       currentUserRole={currentStaff.role}
     />
   )

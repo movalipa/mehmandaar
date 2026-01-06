@@ -260,7 +260,7 @@ export default function SettingsPage() {
                   </Card>
                   <Card className="border-2 cursor-pointer">
                     <CardContent className="p-4 text-center">
-                      <div className="w-full h-20 bg-gradient-to-br from-white to-gray-900 border rounded mb-2"></div>
+                      <div className="w-full h-20 bg-linear-to-br from-white to-gray-900 border rounded mb-2"></div>
                       <p className="font-medium">اتوماتیک</p>
                     </CardContent>
                   </Card>

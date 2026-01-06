@@ -245,6 +245,7 @@ export function ReservationsClient({
             <Tabs
               dir="rtl"
               value={statusFilter}
+              // biome-ignore lint/suspicious/noExplicitAny: <i know>
               onValueChange={value => setStatusFilter(value as any)}
               className="space-y-4"
             >
@@ -383,7 +384,6 @@ export function ReservationsClient({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         reservation={selectedReservation}
-        hotelId={hotelId}
       />
 
       <StatusUpdateDialog

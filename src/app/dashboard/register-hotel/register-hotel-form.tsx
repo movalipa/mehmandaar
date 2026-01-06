@@ -1,4 +1,3 @@
-// app/dashboard/register-hotel/register-hotel-form.tsx
 "use client"
 
 import { Building2, CheckCircle2, Loader2, MapPin, Plus } from "lucide-react"

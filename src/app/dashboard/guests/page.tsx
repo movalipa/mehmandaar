@@ -1,6 +1,6 @@
 // app/dashboard/guests/page.tsx
 import { requireAuth } from "@/actions/auth"
-import { GuestsClient } from "@/components/dashboard/guests/guests-client"
+import { GuestsClient } from "@/app/dashboard/guests/guests-client"
 import {
   Card,
   CardDescription,

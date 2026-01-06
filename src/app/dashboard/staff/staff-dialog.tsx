@@ -50,7 +50,6 @@ interface StaffDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   staff: StaffMember | null
-  hotelId: UUID
   currentUserRole: StaffRole
 }
 
@@ -67,7 +66,6 @@ export function StaffDialog({
   open,
   onOpenChange,
   staff,
-  hotelId,
   currentUserRole,
 }: StaffDialogProps) {
   const form = useForm<FormValues>({
@@ -128,7 +126,7 @@ export function StaffDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>
             {staff ? "ویرایش کارمند" : "افزودن کارمند جدید"}

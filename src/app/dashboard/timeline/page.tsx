@@ -1,8 +1,6 @@
-// app/dashboard/timeline/page.tsx
-
 import { requireAuth } from "@/actions/auth"
 import { getRoomsForReservation } from "@/actions/reservations"
-import { TimelineClient } from "@/components/dashboard/timeline/timeline-client"
+import { TimelineClient } from "@/app/dashboard/timeline/timeline-client"
 import {
   Card,
   CardDescription,

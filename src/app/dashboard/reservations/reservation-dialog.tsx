@@ -85,14 +85,12 @@ interface ReservationDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   reservation: Reservation | null
-  hotelId: UUID
 }
 
 export function ReservationDialog({
   open,
   onOpenChange,
   reservation,
-  hotelId,
 }: ReservationDialogProps) {
   const [loading, setLoading] = useState(false)
   const [guests, setGuests] = useState<Guest[]>([])

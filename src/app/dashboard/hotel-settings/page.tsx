@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 import { requireAuth } from "@/actions/auth"
-import { HotelSettingsClient } from "@/components/dashboard/hotel/hotel-settings-client"
+import { HotelSettingsClient } from "@/app/dashboard/hotel-settings/hotel-settings-client"
 import {
   Card,
   CardDescription,

@@ -1,5 +1,4 @@
 import { requireAuth } from "@/actions/auth"
-import { ReservationsClient } from "@/components/dashboard/reservations/reservations-client"
 import {
   Card,
   CardDescription,
@@ -7,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { getAllReservations } from "@/lib/data/reservations"
+import { ReservationsClient } from "./reservations-client"
 
 export default async function ReservationsPage() {
   const staff = await requireAuth()

@@ -1,5 +1,5 @@
 import { requireAuth } from "@/actions/auth"
-import { ReportsClient } from "@/components/dashboard/reports/reports-client"
+import { ReportsClient } from "@/app/dashboard/reports/reports-client"
 import {
   Card,
   CardDescription,

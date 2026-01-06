@@ -7,7 +7,7 @@ import {
   Users,
 } from "lucide-react"
 import { requireAuth } from "@/actions/auth"
-import { NoHotelState } from "@/components/dashboard/no-hotel-state"
+import { NoHotelState } from "@/components/shared/no-hotel-state"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,

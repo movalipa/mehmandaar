@@ -46,14 +46,12 @@ interface StaffClientProps {
     receptionist: number
     staff: number
   }
-  hotelId: UUID
   currentUserRole: StaffRole
 }
 
 export function StaffClient({
   staffList,
   stats,
-  hotelId,
   currentUserRole,
 }: StaffClientProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -295,7 +293,6 @@ export function StaffClient({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         staff={selectedStaff}
-        hotelId={hotelId}
         currentUserRole={currentUserRole}
       />
 
