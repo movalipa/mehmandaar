@@ -3,7 +3,6 @@
 import { Loader2, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { deleteRoom } from "@/actions/rooms"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -14,6 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { deleteRoom } from "@/db/actions/rooms"
 import type { Room } from "@/db/schema"
 
 interface DeleteRoomDialogProps {

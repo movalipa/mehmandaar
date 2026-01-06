@@ -3,7 +3,6 @@
 import type { UUID } from "node:crypto"
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import { useEffect, useEffectEvent, useState } from "react"
-import { getReservationsForTimeline } from "@/actions/reservations"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -19,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { getReservationsForTimeline } from "@/db/actions/reservations"
 import { TimelineGrid } from "./timeline-grid"
 
 type ReservationStatus = "reserved" | "checked-in" | "checked-out" | "cancelled"

@@ -1,4 +1,3 @@
-import { requireAuth } from "@/actions/auth"
 import { StaffClient } from "@/app/dashboard/staff/staff-client"
 import {
   Card,
@@ -6,7 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { getAllStaff } from "@/lib/data/staff"
+import { requireAuth } from "@/db/actions/auth"
+import { getAllStaff } from "@/db/data/staff"
 
 export default async function StaffPage() {
   const currentStaff = await requireAuth()

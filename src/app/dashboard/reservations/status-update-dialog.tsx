@@ -4,7 +4,6 @@ import type { UUID } from "node:crypto"
 import { BookmarkCheck, CheckCircle2, Loader2, XCircle } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { updateReservationStatus } from "@/actions/reservations"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { updateReservationStatus } from "@/db/actions/reservations"
 
 type ReservationStatus = "reserved" | "checked-in" | "checked-out" | "cancelled"
 

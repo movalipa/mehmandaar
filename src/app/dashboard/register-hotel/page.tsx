@@ -1,7 +1,7 @@
 import { Building2, Sparkles } from "lucide-react"
 import { redirect } from "next/navigation"
-import { requireAuth } from "@/actions/auth"
 import { RegisterHotelForm } from "@/app/dashboard/register-hotel/register-hotel-form"
+import { requireAuth } from "@/db/actions/auth"
 
 export default async function RegisterHotelPage() {
   const staff = await requireAuth()

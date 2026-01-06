@@ -1,11 +1,11 @@
-import { requireAuth } from "@/actions/auth"
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { getRoomsByHotel } from "@/lib/data/rooms"
+import { requireAuth } from "@/db/actions/auth"
+import { getRoomsByHotel } from "@/db/data/rooms"
 import { RoomsClient } from "./rooms-client"
 
 export default async function RoomsPage() {

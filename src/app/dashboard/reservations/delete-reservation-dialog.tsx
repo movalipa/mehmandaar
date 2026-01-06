@@ -4,7 +4,6 @@ import type { UUID } from "node:crypto"
 import { AlertTriangle, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { deleteReservation } from "@/actions/reservations"
 import {
   AlertDialog,
   AlertDialogContent,
@@ -14,6 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { deleteReservation } from "@/db/actions/reservations"
 
 interface Reservation {
   id: UUID

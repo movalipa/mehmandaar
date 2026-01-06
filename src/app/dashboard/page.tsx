@@ -6,7 +6,6 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react"
-import { requireAuth } from "@/actions/auth"
 import { NoHotelState } from "@/components/shared/no-hotel-state"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -17,14 +16,15 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { requireAuth } from "@/db/actions/auth"
 import {
   getDashboardStats,
   getRoomStatusByGroup,
   getTodayStats,
-} from "@/lib/data/dashboard"
-import { getRecentReservations } from "@/lib/data/reservations"
-import { formatDateToPersian } from "@/lib/utils/date"
-import { getStatusBadge } from "@/lib/utils/status"
+} from "@/db/data/dashboard"
+import { getRecentReservations } from "@/db/data/reservations"
+import { formatDateToPersian } from "@/utils/date"
+import { getStatusBadge } from "@/utils/status"
 
 export default async function DashboardPage() {
   const staff = await requireAuth()

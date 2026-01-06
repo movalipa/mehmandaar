@@ -4,7 +4,6 @@ import type { UUID } from "node:crypto"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { deleteStaff } from "@/actions/staff"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { deleteStaff } from "@/db/actions/staff"
 
 type StaffRole = "owner" | "manager" | "receptionist" | "staff"
 

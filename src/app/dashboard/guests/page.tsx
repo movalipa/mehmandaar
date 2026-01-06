@@ -1,5 +1,5 @@
 // app/dashboard/guests/page.tsx
-import { requireAuth } from "@/actions/auth"
+
 import { GuestsClient } from "@/app/dashboard/guests/guests-client"
 import {
   Card,
@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { getGuestsByHotel } from "@/lib/data/guests"
+import { requireAuth } from "@/db/actions/auth"
+import { getGuestsByHotel } from "@/db/data/guests"
 
 export default async function GuestsPage() {
   const staff = await requireAuth()

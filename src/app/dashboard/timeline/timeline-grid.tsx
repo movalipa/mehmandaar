@@ -2,7 +2,7 @@
 
 import type { UUID } from "node:crypto"
 import { useMemo } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/utils"
 
 type ReservationStatus = "reserved" | "checked-in" | "checked-out" | "cancelled"
 

@@ -8,7 +8,7 @@ import {
   useContext,
   useState,
 } from "react"
-import { registerUser, sendOTP, verifyOTP } from "@/actions/auth"
+import { registerUser, sendOTP, verifyOTP } from "@/db/actions/auth"
 
 export type Step = "phone" | "code" | "register"
 

@@ -8,7 +8,6 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
-import { createStaff, updateStaff } from "@/actions/staff"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -35,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { createStaff, updateStaff } from "@/db/actions/staff"
 
 type StaffRole = "owner" | "manager" | "receptionist" | "staff"
 

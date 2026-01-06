@@ -4,7 +4,7 @@ import { and, eq, gt, isNull } from "drizzle-orm"
 import { redirect } from "next/navigation"
 import { db } from "@/db"
 import { phoneOtps, staff } from "@/db/schema"
-import { getSession } from "@/lib/session"
+import { getSession } from "@/utils/session"
 
 export async function sendOTP(phone: string) {
   try {

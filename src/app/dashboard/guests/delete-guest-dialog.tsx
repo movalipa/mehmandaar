@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
-import { deleteGuest } from "@/actions/guests"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -16,6 +15,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { deleteGuest } from "@/db/actions/guests"
 import type { Guest } from "@/db/schema"
 
 interface DeleteGuestDialogProps {

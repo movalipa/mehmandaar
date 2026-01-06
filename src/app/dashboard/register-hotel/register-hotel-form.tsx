@@ -3,7 +3,6 @@
 import { Building2, CheckCircle2, Loader2, MapPin, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { registerHotel } from "@/actions/hotel"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { registerHotel } from "@/db/actions/hotel"
 
 interface RegisterHotelFormProps {
   staffName: string

@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm"
-import { requireAuth } from "@/actions/auth"
 import { HotelSettingsClient } from "@/app/dashboard/hotel-settings/hotel-settings-client"
 import {
   Card,
@@ -8,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { db } from "@/db"
+import { requireAuth } from "@/db/actions/auth"
 import { hotels } from "@/db/schema"
 
 export default async function HotelSettingsPage() {

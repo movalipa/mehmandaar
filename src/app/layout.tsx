@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { danaFont } from "@/fonts/font"
 import "@/app/globals.css"
 
-import { ThemeProvider } from "@/components/providers/theme-provider"
+import { ThemeProvider } from "next-themes"
 import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {

@@ -5,7 +5,6 @@ import type { UUID } from "node:crypto"
 import { Loader2, Phone, Save, User, UserCircle } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { updateProfile } from "@/actions/profile"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { updateProfile } from "@/db/actions/profile"
 
 type StaffRole = "owner" | "manager" | "receptionist" | "staff"
 

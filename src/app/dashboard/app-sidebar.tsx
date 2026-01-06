@@ -15,7 +15,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { logout } from "@/actions/auth"
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +27,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { logout } from "@/db/actions/auth"
 import type { Staff } from "@/db/schema"
 
 interface MenuItem {

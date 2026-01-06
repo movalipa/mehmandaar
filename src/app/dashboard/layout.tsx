@@ -1,4 +1,3 @@
-import { requireAuth } from "@/actions/auth"
 import Clock from "@/components/shared/Clock"
 import ThemeButton from "@/components/shared/theme-button"
 import { Separator } from "@/components/ui/separator"
@@ -7,6 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { requireAuth } from "@/db/actions/auth"
 import { AppSidebar } from "./app-sidebar"
 
 export default async function DashboardLayout({

@@ -1,5 +1,3 @@
-import { requireAuth } from "@/actions/auth"
-import { getRoomsForReservation } from "@/actions/reservations"
 import { TimelineClient } from "@/app/dashboard/timeline/timeline-client"
 import {
   Card,
@@ -7,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { requireAuth } from "@/db/actions/auth"
+import { getRoomsForReservation } from "@/db/actions/reservations"
 
 export default async function TimelinePage() {
   const staff = await requireAuth()

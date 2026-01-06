@@ -3,7 +3,6 @@
 import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { createRoom, updateRoom } from "@/actions/rooms"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { createRoom, updateRoom } from "@/db/actions/rooms"
 import type { Room } from "@/db/schema"
 
 interface RoomDialogProps {

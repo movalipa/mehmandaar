@@ -1,4 +1,3 @@
-import { requireAuth } from "@/actions/auth"
 import { ReportsClient } from "@/app/dashboard/reports/reports-client"
 import {
   Card,
@@ -6,7 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { getReportsData } from "@/lib/data/reports"
+import { requireAuth } from "@/db/actions/auth"
+import { getReportsData } from "@/db/data/reports"
 
 export default async function ReportsPage() {
   const staff = await requireAuth()

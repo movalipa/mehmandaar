@@ -1,11 +1,11 @@
-import { requireAuth } from "@/actions/auth"
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { getAllReservations } from "@/lib/data/reservations"
+import { requireAuth } from "@/db/actions/auth"
+import { getAllReservations } from "@/db/data/reservations"
 import { ReservationsClient } from "./reservations-client"
 
 export default async function ReservationsPage() {

@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { createGuest, updateGuest } from "@/actions/guests"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -18,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { createGuest, updateGuest } from "@/db/actions/guests"
 import type { Guest } from "@/db/schema"
 
 interface GuestDialogProps {
