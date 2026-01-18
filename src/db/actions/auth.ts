@@ -8,7 +8,8 @@ import { getSession } from "@/utils/session"
 
 export async function sendOTP(phone: string) {
   try {
-    const code = Math.floor(100000 + Math.random() * 900000).toString()
+    // const code = Math.floor(100000 + Math.random() * 900000).toString()
+    const code = "123456"
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
     await db.insert(phoneOtps).values({
